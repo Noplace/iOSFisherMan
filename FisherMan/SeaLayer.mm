@@ -7,7 +7,7 @@
 //
 
 // Import the interfaces
-#import "HelloWorldLayer.h"
+#import "SeaLayer.h"
 
 // Needed to obtain the Navigation Controller
 #import "AppDelegate.h"
@@ -19,15 +19,15 @@ enum {
 };
 
 
-#pragma mark - HelloWorldLayer
+#pragma mark - SeaLayer
 
-@interface HelloWorldLayer()
+@interface SeaLayer()
 -(void) initPhysics;
 -(void) addNewSpriteAtPosition:(CGPoint)p;
 -(void) createMenu;
 @end
 
-@implementation HelloWorldLayer
+@implementation SeaLayer
 
 +(CCScene *) scene
 {
@@ -35,7 +35,7 @@ enum {
 	CCScene *scene = [CCScene node];
 	
 	// 'layer' is an autorelease object.
-	HelloWorldLayer *layer = [HelloWorldLayer node];
+	SeaLayer *layer = [SeaLayer node];
 	
 	// add layer as a child to scene
 	[scene addChild: layer];
@@ -74,9 +74,9 @@ enum {
 		[self addChild:parent z:0 tag:kTagParentNode];
 		
 		
-		[self addNewSpriteAtPosition:ccp(s.width/2, s.height/2)];
-		
-		CCLabelTTF *label = [CCLabelTTF labelWithString:@"Tap screen" fontName:@"Marker Felt" fontSize:32];
+		//[self addNewSpriteAtPosition:ccp(s.width/2, s.height/2)];
+		[self addNewSpriteAtPosition:ccp(1,100)];
+		CCLabelTTF *label = [CCLabelTTF labelWithString:@"Tap screen" fontName:@"Verdana" fontSize:32];
 		[self addChild:label z:0];
 		[label setColor:ccc3(0,0,255)];
 		label.position = ccp( s.width/2, s.height-50);
@@ -104,7 +104,7 @@ enum {
 	
 	// Reset Button
 	CCMenuItemLabel *reset = [CCMenuItemFont itemWithString:@"Reset" block:^(id sender){
-		[[CCDirector sharedDirector] replaceScene: [HelloWorldLayer scene]];
+		[[CCDirector sharedDirector] replaceScene: [SeaLayer scene]];
 	}];
 	
 	// Achievement Menu Item using blocks
@@ -148,6 +148,7 @@ enum {
 
 -(void) initPhysics
 {
+    accumulator_ = 0;
 	
 	CGSize s = [[CCDirector sharedDirector] winSize];
 	
@@ -214,11 +215,11 @@ enum {
 	
 	ccGLEnableVertexAttribs( kCCVertexAttribFlag_Position );
 	
-	kmGLPushMatrix();
+	//kmGLPushMatrix();
 	
-	world->DrawDebugData();	
+	//world->DrawDebugData();
 	
-	kmGLPopMatrix();
+	//kmGLPopMatrix();
 }
 
 -(void) addNewSpriteAtPosition:(CGPoint)p
@@ -258,17 +259,21 @@ enum {
 
 -(void) update: (ccTime) dt
 {
-	//It is recommended that a fixed time step is used with Box2D for stability
-	//of the simulation, however, we are using a variable time step here.
-	//You need to make an informed choice, the following URL is useful
-	//http://gafferongames.com/game-physics/fix-your-timestep/
+    const ccTime fixed_dt_ = 1.0f/60.0f;
+    accumulator_ += dt;
+    
+    int32 velocityIterations = 8;
+    int32 positionIterations = 1;
+    
+    while ( accumulator_ >= fixed_dt_ )
+    {
+        // Instruct the world to perform a single step of simulation. It is
+        // generally best to keep the time step and iterations fixed.
+        world->Step(fixed_dt_, velocityIterations, positionIterations);
+        accumulator_ -= fixed_dt_;
+    }
+    
 	
-	int32 velocityIterations = 8;
-	int32 positionIterations = 1;
-	
-	// Instruct the world to perform a single step of simulation. It is
-	// generally best to keep the time step and iterations fixed.
-	world->Step(dt, velocityIterations, positionIterations);	
 }
 
 - (void)ccTouchesEnded:(NSSet *)touches withEvent:(UIEvent *)event

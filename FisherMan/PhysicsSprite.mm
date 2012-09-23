@@ -10,7 +10,7 @@
 #import "PhysicsSprite.h"
 
 // Needed PTM_RATIO
-#import "HelloWorldLayer.h"
+#import "SeaLayer.h"
 
 #pragma mark - PhysicsSprite
 @implementation PhysicsSprite
@@ -54,7 +54,7 @@
 	// Rot, Translate Matrix
 	transform_ = CGAffineTransformMake( c,  s,
 									   -s,	c,
-									   x,	y );	
+									   x,	y );
 	
 	return transform_;
 }

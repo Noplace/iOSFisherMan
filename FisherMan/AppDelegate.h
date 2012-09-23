@@ -14,7 +14,7 @@
 	UIWindow *window_;
 	UINavigationController *navController_;
 	
-	CCDirectorIOS	*director_;							// weak ref
+	CCDirectorDisplayLink	*director_;							// weak ref
 }
 
 @property (nonatomic, retain) UIWindow *window;
