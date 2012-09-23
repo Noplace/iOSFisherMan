@@ -7,8 +7,8 @@
 //
 
 // Import the interfaces
-#import "MainMenuLayer.h"
-#import "SeaLayer.h"
+#import "MainMenuScene.h"
+#import "GameScene.h"
 // Needed to obtain the Navigation Controller
 #import "AppDelegate.h"
 
@@ -55,7 +55,7 @@
 		//Set up sprite
 		
 
-		CCLabelTTF *label = [CCLabelTTF labelWithString:@"Game Title" fontName:@"Verdana" fontSize:32];
+		CCLabelTTF *label = [CCLabelTTF labelWithString:@"Pick a Fish!" fontName:@"Verdana" fontSize:32];
 		[self addChild:label z:0];
 		[label setColor:ccc3(0,165,125)];
 		label.position = ccp( s.width/2, s.height-50);
@@ -77,8 +77,8 @@
 	[CCMenuItemFont setFontSize:22];
 	
 	// Reset Button
-	CCMenuItemLabel *reset = [CCMenuItemFont itemWithString:@"Reset" block:^(id sender){
-		[[CCDirector sharedDirector] replaceScene: [SeaLayer scene]];
+	CCMenuItemLabel *startGame = [CCMenuItemFont itemWithString:@"Start Game" block:^(id sender){
+		[[CCDirector sharedDirector] replaceScene: [GameScene node]];
 	}];
 	
 	// Achievement Menu Item using blocks
@@ -109,7 +109,7 @@
 		[leaderboardViewController release];
 	}];
 	
-	CCMenu *menu = [CCMenu menuWithItems:itemAchievement, itemLeaderboard, reset, nil];
+	CCMenu *menu = [CCMenu menuWithItems:startGame,itemAchievement, itemLeaderboard, nil];
 	
 	[menu alignItemsVertically];
 	

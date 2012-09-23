@@ -6,8 +6,12 @@
 //
 //
 
-#import "CCScene.h"
+#import "cocos2d.h"
+#import "BackgroundLayer.h"
+#import "SeaLayer.h"
 
-@interface GameScene : CCScene
+@interface GameScene : CCScene <UIAlertViewDelegate>
+
+-(id)init;
 
 @end

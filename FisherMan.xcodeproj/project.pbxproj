@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6577EF98160D900F005217AF /* GameScene.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6577EF97160D900F005217AF /* GameScene.mm */; };
+		6577EF9B160D91A8005217AF /* BackgroundLayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6577EF9A160D91A8005217AF /* BackgroundLayer.mm */; };
 		65783191160C3CFA00059086 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 65783190160C3CFA00059086 /* QuartzCore.framework */; };
 		65783193160C3CFA00059086 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 65783192160C3CFA00059086 /* OpenGLES.framework */; };
 		65783195160C3CFA00059086 /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 65783194160C3CFA00059086 /* OpenAL.framework */; };
@@ -16,8 +18,6 @@
 		6578319D160C3CFA00059086 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6578319C160C3CFA00059086 /* Foundation.framework */; };
 		6578319F160C3CFA00059086 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6578319E160C3CFA00059086 /* CoreGraphics.framework */; };
 		657831A1160C3CFA00059086 /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 657831A0160C3CFA00059086 /* GameKit.framework */; };
-		657831A5160C3CFA00059086 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 657831A4160C3CFA00059086 /* Default.png */; };
-		657831A7160C3CFA00059086 /* Default-Landscape~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 657831A6160C3CFA00059086 /* Default-Landscape~ipad.png */; };
 		657831A9160C3CFA00059086 /* fps_images.png in Resources */ = {isa = PBXBuildFile; fileRef = 657831A8160C3CFA00059086 /* fps_images.png */; };
 		657831AB160C3CFA00059086 /* fps_images-hd.png in Resources */ = {isa = PBXBuildFile; fileRef = 657831AA160C3CFA00059086 /* fps_images-hd.png */; };
 		657831AD160C3CFA00059086 /* fps_images-ipadhd.png in Resources */ = {isa = PBXBuildFile; fileRef = 657831AC160C3CFA00059086 /* fps_images-ipadhd.png */; };
@@ -176,14 +176,21 @@
 		657833A6160C3CFC00059086 /* b2Rope.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 657833A5160C3CFC00059086 /* b2Rope.cpp */; };
 		657833AC160C3CFC00059086 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 657833AB160C3CFC00059086 /* main.m */; };
 		657833AF160C3CFC00059086 /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 657833AE160C3CFC00059086 /* AppDelegate.mm */; };
-		657833B2160C3CFC00059086 /* HelloWorldLayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 657833B1160C3CFC00059086 /* HelloWorldLayer.mm */; };
-		657833B5160C3CFC00059086 /* IntroLayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 657833B4160C3CFC00059086 /* IntroLayer.mm */; };
+		657833B2160C3CFC00059086 /* SeaLayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 657833B1160C3CFC00059086 /* SeaLayer.mm */; };
+		657833B5160C3CFC00059086 /* IntroScene.mm in Sources */ = {isa = PBXBuildFile; fileRef = 657833B4160C3CFC00059086 /* IntroScene.mm */; };
 		657833B8160C3CFC00059086 /* GLES-Render.mm in Sources */ = {isa = PBXBuildFile; fileRef = 657833B7160C3CFC00059086 /* GLES-Render.mm */; };
 		657833BB160C3CFC00059086 /* PhysicsSprite.mm in Sources */ = {isa = PBXBuildFile; fileRef = 657833BA160C3CFC00059086 /* PhysicsSprite.mm */; };
 		657833BD160C3CFC00059086 /* blocks.png in Resources */ = {isa = PBXBuildFile; fileRef = 657833BC160C3CFC00059086 /* blocks.png */; };
+		657833C5160CA1FD00059086 /* MainMenuScene.mm in Sources */ = {isa = PBXBuildFile; fileRef = 657833C4160CA1FC00059086 /* MainMenuScene.mm */; };
+		657833C8160CD8DB00059086 /* SeaWaveSprite.mm in Sources */ = {isa = PBXBuildFile; fileRef = 657833C7160CD8DB00059086 /* SeaWaveSprite.mm */; };
+		6578EF2A160D0C1400059086 /* sea_wave.png in Resources */ = {isa = PBXBuildFile; fileRef = 6578EF29160D0C1400059086 /* sea_wave.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		6577EF96160D900F005217AF /* GameScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameScene.h; sourceTree = "<group>"; };
+		6577EF97160D900F005217AF /* GameScene.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = GameScene.mm; sourceTree = "<group>"; };
+		6577EF99160D91A8005217AF /* BackgroundLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BackgroundLayer.h; sourceTree = "<group>"; };
+		6577EF9A160D91A8005217AF /* BackgroundLayer.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = BackgroundLayer.mm; sourceTree = "<group>"; };
 		6578318C160C3CFA00059086 /* FisherMan.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FisherMan.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		65783190160C3CFA00059086 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		65783192160C3CFA00059086 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
@@ -536,15 +543,20 @@
 		657833AB160C3CFC00059086 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		657833AD160C3CFC00059086 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		657833AE160C3CFC00059086 /* AppDelegate.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = AppDelegate.mm; sourceTree = "<group>"; };
-		657833B0160C3CFC00059086 /* HelloWorldLayer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HelloWorldLayer.h; sourceTree = "<group>"; };
-		657833B1160C3CFC00059086 /* HelloWorldLayer.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = HelloWorldLayer.mm; sourceTree = "<group>"; };
-		657833B3160C3CFC00059086 /* IntroLayer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IntroLayer.h; sourceTree = "<group>"; };
-		657833B4160C3CFC00059086 /* IntroLayer.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = IntroLayer.mm; sourceTree = "<group>"; };
+		657833B0160C3CFC00059086 /* SeaLayer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SeaLayer.h; sourceTree = "<group>"; };
+		657833B1160C3CFC00059086 /* SeaLayer.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = SeaLayer.mm; sourceTree = "<group>"; };
+		657833B3160C3CFC00059086 /* IntroScene.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IntroScene.h; sourceTree = "<group>"; };
+		657833B4160C3CFC00059086 /* IntroScene.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = IntroScene.mm; sourceTree = "<group>"; };
 		657833B6160C3CFC00059086 /* GLES-Render.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "GLES-Render.h"; sourceTree = "<group>"; };
 		657833B7160C3CFC00059086 /* GLES-Render.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = "GLES-Render.mm"; sourceTree = "<group>"; };
 		657833B9160C3CFC00059086 /* PhysicsSprite.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PhysicsSprite.h; sourceTree = "<group>"; };
 		657833BA160C3CFC00059086 /* PhysicsSprite.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = PhysicsSprite.mm; sourceTree = "<group>"; };
 		657833BC160C3CFC00059086 /* blocks.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = blocks.png; path = Resources/blocks.png; sourceTree = "<group>"; };
+		657833C3160CA1FC00059086 /* MainMenuScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainMenuScene.h; sourceTree = "<group>"; };
+		657833C4160CA1FC00059086 /* MainMenuScene.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MainMenuScene.mm; sourceTree = "<group>"; };
+		657833C6160CD8DB00059086 /* SeaWaveSprite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SeaWaveSprite.h; sourceTree = "<group>"; };
+		657833C7160CD8DB00059086 /* SeaWaveSprite.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = SeaWaveSprite.mm; sourceTree = "<group>"; };
+		6578EF29160D0C1400059086 /* sea_wave.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = sea_wave.png; path = Resources/sea_wave.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -603,16 +615,7 @@
 		657831A2160C3CFA00059086 /* FisherMan */ = {
 			isa = PBXGroup;
 			children = (
-				657833AD160C3CFC00059086 /* AppDelegate.h */,
-				657833AE160C3CFC00059086 /* AppDelegate.mm */,
-				657833B0160C3CFC00059086 /* HelloWorldLayer.h */,
-				657833B1160C3CFC00059086 /* HelloWorldLayer.mm */,
-				657833B3160C3CFC00059086 /* IntroLayer.h */,
-				657833B4160C3CFC00059086 /* IntroLayer.mm */,
-				657833B6160C3CFC00059086 /* GLES-Render.h */,
-				657833B7160C3CFC00059086 /* GLES-Render.mm */,
-				657833B9160C3CFC00059086 /* PhysicsSprite.h */,
-				657833BA160C3CFC00059086 /* PhysicsSprite.mm */,
+				657833C9160CD8E900059086 /*  Code */,
 				657831A3160C3CFA00059086 /* Resources */,
 				657831BD160C3CFA00059086 /* libs */,
 				657833A9160C3CFC00059086 /* Supporting Files */,
@@ -623,6 +626,7 @@
 		657831A3160C3CFA00059086 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				6578EF29160D0C1400059086 /* sea_wave.png */,
 				657831A4160C3CFA00059086 /* Default.png */,
 				657831A6160C3CFA00059086 /* Default-Landscape~ipad.png */,
 				657831A8160C3CFA00059086 /* fps_images.png */,
@@ -1142,6 +1146,31 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		657833C9160CD8E900059086 /*  Code */ = {
+			isa = PBXGroup;
+			children = (
+				657833C3160CA1FC00059086 /* MainMenuScene.h */,
+				657833C4160CA1FC00059086 /* MainMenuScene.mm */,
+				657833C6160CD8DB00059086 /* SeaWaveSprite.h */,
+				657833C7160CD8DB00059086 /* SeaWaveSprite.mm */,
+				657833AD160C3CFC00059086 /* AppDelegate.h */,
+				657833AE160C3CFC00059086 /* AppDelegate.mm */,
+				657833B0160C3CFC00059086 /* SeaLayer.h */,
+				657833B1160C3CFC00059086 /* SeaLayer.mm */,
+				657833B3160C3CFC00059086 /* IntroScene.h */,
+				657833B4160C3CFC00059086 /* IntroScene.mm */,
+				657833B6160C3CFC00059086 /* GLES-Render.h */,
+				657833B7160C3CFC00059086 /* GLES-Render.mm */,
+				657833B9160C3CFC00059086 /* PhysicsSprite.h */,
+				657833BA160C3CFC00059086 /* PhysicsSprite.mm */,
+				6577EF96160D900F005217AF /* GameScene.h */,
+				6577EF97160D900F005217AF /* GameScene.mm */,
+				6577EF99160D91A8005217AF /* BackgroundLayer.h */,
+				6577EF9A160D91A8005217AF /* BackgroundLayer.mm */,
+			);
+			name = " Code";
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -1176,6 +1205,7 @@
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
+				English,
 			);
 			mainGroup = 65783181160C3CF900059086;
 			productRefGroup = 6578318D160C3CFA00059086 /* Products */;
@@ -1192,8 +1222,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				657831A5160C3CFA00059086 /* Default.png in Resources */,
-				657831A7160C3CFA00059086 /* Default-Landscape~ipad.png in Resources */,
 				657831A9160C3CFA00059086 /* fps_images.png in Resources */,
 				657831AB160C3CFA00059086 /* fps_images-hd.png in Resources */,
 				657831AD160C3CFA00059086 /* fps_images-ipadhd.png in Resources */,
@@ -1206,6 +1234,7 @@
 				657831BC160C3CFA00059086 /* iTunesArtwork in Resources */,
 				657832FA160C3CFB00059086 /* ChangeLog in Resources */,
 				657833BD160C3CFC00059086 /* blocks.png in Resources */,
+				6578EF2A160D0C1400059086 /* sea_wave.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1363,10 +1392,14 @@
 				657833A6160C3CFC00059086 /* b2Rope.cpp in Sources */,
 				657833AC160C3CFC00059086 /* main.m in Sources */,
 				657833AF160C3CFC00059086 /* AppDelegate.mm in Sources */,
-				657833B2160C3CFC00059086 /* HelloWorldLayer.mm in Sources */,
-				657833B5160C3CFC00059086 /* IntroLayer.mm in Sources */,
+				657833B2160C3CFC00059086 /* SeaLayer.mm in Sources */,
+				657833B5160C3CFC00059086 /* IntroScene.mm in Sources */,
 				657833B8160C3CFC00059086 /* GLES-Render.mm in Sources */,
 				657833BB160C3CFC00059086 /* PhysicsSprite.mm in Sources */,
+				657833C5160CA1FD00059086 /* MainMenuScene.mm in Sources */,
+				657833C8160CD8DB00059086 /* SeaWaveSprite.mm in Sources */,
+				6577EF98160D900F005217AF /* GameScene.mm in Sources */,
+				6577EF9B160D91A8005217AF /* BackgroundLayer.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1418,11 +1451,30 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = YES;
 				COPY_PHASE_STRIP = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/../../../.Trash/CorePlot_1.0.zip.download/CorePlot_1/__MACOSX/CorePlot_1.0/Binaries/MacOS\"",
+					"\"$(SRCROOT)/../../../.Trash/CorePlot_1.0.zip.download/CorePlot_1/CorePlot_1.0/Binaries/MacOS\"",
+					"\"$(SRCROOT)/../../../Downloads/CorePlot_1.0/Binaries/MacOS\"",
+					"\"$(SRCROOT)/../../../Library/Containers/com.apple.Preview/Data/Downloads/CorePlot_1.0/Binaries/MacOS\"",
+					"\"$(SRCROOT)/../../../Library/Containers/com.apple.TextEdit/Data/Downloads/CorePlot_1.0/Binaries/MacOS\"",
+				);
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = FisherMan/Prefix.pch;
 				HEADER_SEARCH_PATHS = "\"FisherMan/libs/kazmath/include\"";
 				INFOPLIST_FILE = FisherMan/Resources/Info.plist;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/../../../.Trash/CorePlot_1.0.zip.download/CorePlot_1/CorePlot_1.0/Binaries/iOS\"",
+					"\"$(SRCROOT)/../../../.Trash\"",
+					"\"$(SRCROOT)/../../../Downloads/cocos2d-iphone-2.0/Resources-Mac\"",
+					"\"$(SRCROOT)/../../../Downloads/CorePlot_1.0/Binaries/iOS\"",
+					"\"$(SRCROOT)/../../../Library/Containers/com.apple.Preview/Data/Downloads/cocos2d-iphone-2.0/Resources-Mac\"",
+					"\"$(SRCROOT)/../../../Library/Containers/com.apple.Preview/Data/Downloads/CorePlot_1.0/Binaries/iOS\"",
+					"\"$(SRCROOT)/../../../Library/Containers/com.apple.TextEdit/Data/Downloads/cocos2d-iphone-2.0/Resources-Mac\"",
+					"\"$(SRCROOT)/../../../Library/Containers/com.apple.TextEdit/Data/Downloads/CorePlot_1.0/Binaries/iOS\"",
+				);
 				OTHER_LDFLAGS = (
 					"-lz",
 					"-ObjC",
@@ -1438,10 +1490,29 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = YES;
 				COPY_PHASE_STRIP = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/../../../.Trash/CorePlot_1.0.zip.download/CorePlot_1/__MACOSX/CorePlot_1.0/Binaries/MacOS\"",
+					"\"$(SRCROOT)/../../../.Trash/CorePlot_1.0.zip.download/CorePlot_1/CorePlot_1.0/Binaries/MacOS\"",
+					"\"$(SRCROOT)/../../../Downloads/CorePlot_1.0/Binaries/MacOS\"",
+					"\"$(SRCROOT)/../../../Library/Containers/com.apple.Preview/Data/Downloads/CorePlot_1.0/Binaries/MacOS\"",
+					"\"$(SRCROOT)/../../../Library/Containers/com.apple.TextEdit/Data/Downloads/CorePlot_1.0/Binaries/MacOS\"",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = FisherMan/Prefix.pch;
 				HEADER_SEARCH_PATHS = "\"FisherMan/libs/kazmath/include\"";
 				INFOPLIST_FILE = FisherMan/Resources/Info.plist;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/../../../.Trash/CorePlot_1.0.zip.download/CorePlot_1/CorePlot_1.0/Binaries/iOS\"",
+					"\"$(SRCROOT)/../../../.Trash\"",
+					"\"$(SRCROOT)/../../../Downloads/cocos2d-iphone-2.0/Resources-Mac\"",
+					"\"$(SRCROOT)/../../../Downloads/CorePlot_1.0/Binaries/iOS\"",
+					"\"$(SRCROOT)/../../../Library/Containers/com.apple.Preview/Data/Downloads/cocos2d-iphone-2.0/Resources-Mac\"",
+					"\"$(SRCROOT)/../../../Library/Containers/com.apple.Preview/Data/Downloads/CorePlot_1.0/Binaries/iOS\"",
+					"\"$(SRCROOT)/../../../Library/Containers/com.apple.TextEdit/Data/Downloads/cocos2d-iphone-2.0/Resources-Mac\"",
+					"\"$(SRCROOT)/../../../Library/Containers/com.apple.TextEdit/Data/Downloads/CorePlot_1.0/Binaries/iOS\"",
+				);
 				OTHER_LDFLAGS = (
 					"-lz",
 					"-ObjC",
@@ -1472,6 +1543,7 @@
 				657833C2160C3CFC00059086 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

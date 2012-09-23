@@ -6,8 +6,14 @@
 //
 //
 
-#import "CCLayer.h"
+#import "cocos2d.h"
+#import "Box2D.h"
+#import "GLES-Render.h"
 
 @interface BackgroundLayer : CCLayer
-
+{
+    CGSize size;
+    ccColor4F skyColor;
+    float t;
+}
 @end

@@ -7,8 +7,6 @@
 //
 
 
-#import <GameKit/GameKit.h>
-
 // When you import this file, you import all the cocos2d classes
 #import "cocos2d.h"
 #import "Box2D.h"
@@ -21,15 +19,17 @@
 #define PTM_RATIO 32
 
 // HelloWorldLayer
-@interface SeaLayer : CCLayer <GKAchievementViewControllerDelegate, GKLeaderboardViewControllerDelegate>
+@interface SeaLayer : CCLayer
 {
+    CGSize size;
 	CCTexture2D *spriteTexture_;	// weak ref
 	b2World* world;					// strong ref
 	GLESDebugDraw *m_debugDraw;		// strong ref
     ccTime accumulator_;
+    CCNode *parentNode;
+    
+    CCSpriteBatchNode* seaParentNode;
+    CCSprite* seaSprite[4];
 }
-
-// returns a CCScene that contains the HelloWorldLayer as the only child
-+(CCScene *) scene;
 
 @end

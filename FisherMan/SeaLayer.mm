@@ -13,9 +13,11 @@
 #import "AppDelegate.h"
 
 #import "PhysicsSprite.h"
+#import "SeaWaveSprite.h"
 
 enum {
 	kTagParentNode = 1,
+    kTagSeaParentNode = 2
 };
 
 
@@ -24,25 +26,10 @@ enum {
 @interface SeaLayer()
 -(void) initPhysics;
 -(void) addNewSpriteAtPosition:(CGPoint)p;
--(void) createMenu;
+-(void) updateSea:(ccTime) dt;
 @end
 
 @implementation SeaLayer
-
-+(CCScene *) scene
-{
-	// 'scene' is an autorelease object.
-	CCScene *scene = [CCScene node];
-	
-	// 'layer' is an autorelease object.
-	SeaLayer *layer = [SeaLayer node];
-	
-	// add layer as a child to scene
-	[scene addChild: layer];
-	
-	// return the scene
-	return scene;
-}
 
 -(id) init
 {
@@ -52,13 +39,11 @@ enum {
 		
 		self.isTouchEnabled = YES;
 		self.isAccelerometerEnabled = YES;
-		CGSize s = [CCDirector sharedDirector].winSize;
+		size = [CCDirector sharedDirector].winSize;
 		
 		// init physics
 		[self initPhysics];
-		
-		// create reset button
-		[self createMenu];
+	
 		
 		//Set up sprite
 		
@@ -71,16 +56,39 @@ enum {
 		spriteTexture_ = [[CCTextureCache sharedTextureCache] addImage:@"blocks.png"];
 		CCNode *parent = [CCNode node];
 #endif
-		[self addChild:parent z:0 tag:kTagParentNode];
+		[self addChild:parent z:-3 tag:kTagParentNode];
+	
+        parentNode = [self getChildByTag:kTagParentNode];
+        {
+            
+            seaParentNode = [CCSpriteBatchNode batchNodeWithFile:@"sea_wave.png" capacity:100];
+            CCTexture2D* seaTexture = [seaParentNode texture];
+            static ccColor3B seaColors[4] = {
+                ccc3(0, 82, 240),
+                ccc3(0, 62, 200),
+                ccc3(0, 42, 160),
+                ccc3(0, 22, 140)
+            };
+            for (int i=0;i<4;++i)
+            {
+                seaSprite[i] = [CCSprite spriteWithTexture:seaTexture rect:CGRectMake(0,0,size.width*2.0f,128)];
+                ccTexParams tp = {GL_LINEAR, GL_LINEAR, GL_MIRRORED_REPEAT, GL_CLAMP_TO_EDGE};
+                
+                [seaSprite[i].texture setTexParameters:&tp];
+                seaSprite[i].color = seaColors[i];
+                seaSprite[i].opacity = 225-(i*10);
+                //seaSprite.
+                //sprite.anchorPoint = ccp(0,0);
+                seaSprite[i].zOrder = -(i<<1);
+                seaSprite[i].position = ccp(0,0);
+                [self addChild:seaSprite[i]];
+            }
+            //[self addChild:seaParentNode z:0 tag:kTagSeaParentNode];
+            //[seaParentNode release];
+        }
+        
 		
-		
-		//[self addNewSpriteAtPosition:ccp(s.width/2, s.height/2)];
-		[self addNewSpriteAtPosition:ccp(1,100)];
-		CCLabelTTF *label = [CCLabelTTF labelWithString:@"Tap screen" fontName:@"Verdana" fontSize:32];
-		[self addChild:label z:0];
-		[label setColor:ccc3(0,0,255)];
-		label.position = ccp( s.width/2, s.height-50);
-		
+	
 		[self scheduleUpdate];
 	}
 	return self;
@@ -96,55 +104,6 @@ enum {
 	
 	[super dealloc];
 }	
-
--(void) createMenu
-{
-	// Default font size will be 22 points.
-	[CCMenuItemFont setFontSize:22];
-	
-	// Reset Button
-	CCMenuItemLabel *reset = [CCMenuItemFont itemWithString:@"Reset" block:^(id sender){
-		[[CCDirector sharedDirector] replaceScene: [SeaLayer scene]];
-	}];
-	
-	// Achievement Menu Item using blocks
-	CCMenuItem *itemAchievement = [CCMenuItemFont itemWithString:@"Achievements" block:^(id sender) {
-		
-		
-		GKAchievementViewController *achivementViewController = [[GKAchievementViewController alloc] init];
-		achivementViewController.achievementDelegate = self;
-		
-		AppController *app = (AppController*) [[UIApplication sharedApplication] delegate];
-		
-		[[app navController] presentModalViewController:achivementViewController animated:YES];
-		
-		[achivementViewController release];
-	}];
-	
-	// Leaderboard Menu Item using blocks
-	CCMenuItem *itemLeaderboard = [CCMenuItemFont itemWithString:@"Leaderboard" block:^(id sender) {
-		
-		
-		GKLeaderboardViewController *leaderboardViewController = [[GKLeaderboardViewController alloc] init];
-		leaderboardViewController.leaderboardDelegate = self;
-		
-		AppController *app = (AppController*) [[UIApplication sharedApplication] delegate];
-		
-		[[app navController] presentModalViewController:leaderboardViewController animated:YES];
-		
-		[leaderboardViewController release];
-	}];
-	
-	CCMenu *menu = [CCMenu menuWithItems:itemAchievement, itemLeaderboard, reset, nil];
-	
-	[menu alignItemsVertically];
-	
-	CGSize size = [[CCDirector sharedDirector] winSize];
-	[menu setPosition:ccp( size.width/2, size.height/2)];
-	
-	
-	[self addChild: menu z:-1];	
-}
 
 -(void) initPhysics
 {
@@ -225,17 +184,17 @@ enum {
 -(void) addNewSpriteAtPosition:(CGPoint)p
 {
 	CCLOG(@"Add sprite %0.2f x %02.f",p.x,p.y);
-	CCNode *parent = [self getChildByTag:kTagParentNode];
+	//CCNode *parent = [self getChildByTag:kTagParentNode];
 	
 	//We have a 64x64 sprite sheet with 4 different 32x32 images.  The following code is
 	//just randomly picking one of the images
 	int idx = (CCRANDOM_0_1() > .5 ? 0:1);
 	int idy = (CCRANDOM_0_1() > .5 ? 0:1);
 	PhysicsSprite *sprite = [PhysicsSprite spriteWithTexture:spriteTexture_ rect:CGRectMake(32 * idx,32 * idy,32,32)];						
-	[parent addChild:sprite];
+	[parentNode addChild:sprite];
 	
 	sprite.position = ccp( p.x, p.y);
-	
+	sprite.zOrder = -3;
 	// Define the dynamic body.
 	//Set up a 1m squared box in the physics world
 	b2BodyDef bodyDef;
@@ -257,6 +216,29 @@ enum {
 	[sprite setPhysicsBody:body];
 }
 
+
+-(void) updateSea:(ccTime) dt
+{
+    static float time = 0;
+    static CGFloat pos[4]={30,50,60,80};
+    static CGFloat amp[4] = {10,12,20,26};
+    static CGFloat dir[4] = {-1,1,-1,1};
+    static CGFloat freq[4] = {1.3f,1.5f,0.8f,0.5};
+    static CGFloat phase[4] = {kmPI*0.25f,0,kmPI,0};
+    
+    float dispX = (size.width*2.0f)/4;
+    float rangeX = dispX/2;
+    
+    for (int i=0;i<4;++i)
+    {
+        seaSprite[i].position = ccp(dispX+dir[i]*(sin((2*kmPI*time*freq[i])+phase[i])*rangeX),pos[i]+sin(time)*amp[i]);
+ 
+    }
+    time += dt*0.2f;
+    
+    //time = fmod(time,1.0f);
+}
+
 -(void) update: (ccTime) dt
 {
     const ccTime fixed_dt_ = 1.0f/60.0f;
@@ -267,6 +249,8 @@ enum {
     
     while ( accumulator_ >= fixed_dt_ )
     {
+        [self updateSea:fixed_dt_];
+       
         // Instruct the world to perform a single step of simulation. It is
         // generally best to keep the time step and iterations fixed.
         world->Step(fixed_dt_, velocityIterations, positionIterations);
@@ -288,18 +272,5 @@ enum {
 	}
 }
 
-#pragma mark GameKit delegate
-
--(void) achievementViewControllerDidFinish:(GKAchievementViewController *)viewController
-{
-	AppController *app = (AppController*) [[UIApplication sharedApplication] delegate];
-	[[app navController] dismissModalViewControllerAnimated:YES];
-}
-
--(void) leaderboardViewControllerDidFinish:(GKLeaderboardViewController *)viewController
-{
-	AppController *app = (AppController*) [[UIApplication sharedApplication] delegate];
-	[[app navController] dismissModalViewControllerAnimated:YES];
-}
 
 @end

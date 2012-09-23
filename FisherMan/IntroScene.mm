@@ -8,14 +8,14 @@
 
 
 // Import the interfaces
-#import "IntroLayer.h"
-#import "MainMenuLayer.h"
+#import "IntroScene.h"
+#import "MainMenuScene.h"
 
 
 #pragma mark - IntroLayer
 
 // HelloWorldLayer implementation
-@implementation IntroLayer
+@implementation IntroScene
 
 // Helper class method that creates a Scene with the HelloWorldLayer as the only child.
 +(CCScene *) scene
@@ -24,7 +24,7 @@
 	CCScene *scene = [CCScene node];
 	
 	// 'layer' is an autorelease object.
-	IntroLayer *layer = [IntroLayer node];
+	IntroScene *layer = [IntroScene node];
 	
 	// add layer as a child to scene
 	[scene addChild: layer];
