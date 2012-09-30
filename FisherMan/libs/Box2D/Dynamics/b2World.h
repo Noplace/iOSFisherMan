@@ -34,6 +34,8 @@ class b2Body;
 class b2Draw;
 class b2Fixture;
 class b2Joint;
+class b2Controller;
+class b2ControllerDef;
 
 /// The world class manages all physics entities, dynamic simulation,
 /// and asynchronous queries. The world also contains efficient memory
@@ -43,7 +45,8 @@ class b2World
 public:
 	/// Construct a world object.
 	/// @param gravity the world gravity vector.
-	b2World(const b2Vec2& gravity);
+	/// @param doSleep improve performance by not simulating inactive bodies.
+	b2World(const b2Vec2& gravity, bool doSleep);
 
 	/// Destruct the world. All physics entities are destroyed and all heap memory is released.
 	~b2World();
@@ -54,7 +57,7 @@ public:
 
 	/// Register a contact filter to provide specific control over collision.
 	/// Otherwise the default filter is used (b2_defaultFilter). The listener is
-	/// owned by you and must remain in scope.
+	/// owned by you and must remain in scope. 
 	void SetContactFilter(b2ContactFilter* filter);
 
 	/// Register a contact event listener. The listener is owned by you and must
@@ -86,6 +89,12 @@ public:
 	/// @warning This function is locked during callbacks.
 	void DestroyJoint(b2Joint* joint);
 
+    /// Add a controller to the world.
+	b2Controller* CreateController(b2ControllerDef* def);
+	
+	/// Removes a controller from the world.
+	void DestroyController(b2Controller* controller);	
+    
 	/// Take a time step. This performs collision detection, integration,
 	/// and constraint solution.
 	/// @param timeStep the amount of time to simulate, this should not vary.
@@ -133,29 +142,27 @@ public:
 	b2Joint* GetJointList();
 	const b2Joint* GetJointList() const;
 
+    /// Get the world controller list. With the returned controller, use b2Controller::GetNext to get
+	/// the next controller in the world list. A NULL controller indicates the end of the list.
+	/// @return the head of the world controller list.
+	b2Controller* GetControllerList();	
+    const b2Controller* GetControllerList() const;
+    
 	/// Get the world contact list. With the returned contact, use b2Contact::GetNext to get
 	/// the next contact in the world list. A NULL contact indicates the end of the list.
 	/// @return the head of the world contact list.
-	/// @warning contacts are created and destroyed in the middle of a time step.
-	/// Use b2ContactListener to avoid missing contacts.
+	/// @warning contacts are 
 	b2Contact* GetContactList();
 	const b2Contact* GetContactList() const;
 
-	/// Enable/disable sleep.
-	void SetAllowSleeping(bool flag);
-	bool GetAllowSleeping() const { return m_allowSleep; }
-
 	/// Enable/disable warm starting. For testing.
 	void SetWarmStarting(bool flag) { m_warmStarting = flag; }
-	bool GetWarmStarting() const { return m_warmStarting; }
 
 	/// Enable/disable continuous physics. For testing.
 	void SetContinuousPhysics(bool flag) { m_continuousPhysics = flag; }
-	bool GetContinuousPhysics() const { return m_continuousPhysics; }
 
 	/// Enable/disable single stepped continuous physics. For testing.
 	void SetSubStepping(bool flag) { m_subStepping = flag; }
-	bool GetSubStepping() const { return m_subStepping; }
 
 	/// Get the number of broad-phase proxies.
 	int32 GetProxyCount() const;
@@ -169,6 +176,9 @@ public:
 	/// Get the number of contacts (each may have 0 or more contact points).
 	int32 GetContactCount() const;
 
+    /// Get the number of controllers.
+	int32 GetControllerCount() const;
+    
 	/// Get the height of the dynamic tree.
 	int32 GetTreeHeight() const;
 
@@ -181,7 +191,7 @@ public:
 
 	/// Change the global gravity vector.
 	void SetGravity(const b2Vec2& gravity);
-
+	
 	/// Get the global gravity vector.
 	b2Vec2 GetGravity() const;
 
@@ -199,10 +209,6 @@ public:
 
 	/// Get the current profile.
 	const b2Profile& GetProfile() const;
-
-	/// Dump the world into the log file.
-	/// @warning this should be called outside of a time step.
-	void Dump();
 
 private:
 
@@ -234,10 +240,12 @@ private:
 
 	b2Body* m_bodyList;
 	b2Joint* m_jointList;
-
+    b2Controller* m_controllerList;
+    
 	int32 m_bodyCount;
 	int32 m_jointCount;
-
+    int32 m_controllerCount;
+    
 	b2Vec2 m_gravity;
 	bool m_allowSleep;
 
@@ -278,6 +286,16 @@ inline const b2Joint* b2World::GetJointList() const
 	return m_jointList;
 }
 
+inline b2Controller* b2World::GetControllerList()
+{
+	return m_controllerList;
+}
+
+inline const b2Controller* b2World::GetControllerList() const
+{
+	return m_controllerList;
+}
+
 inline b2Contact* b2World::GetContactList()
 {
 	return m_contactManager.m_contactList;
@@ -301,6 +319,11 @@ inline int32 b2World::GetJointCount() const
 inline int32 b2World::GetContactCount() const
 {
 	return m_contactManager.m_contactCount;
+}
+
+inline int32 b2World::GetControllerCount() const
+{
+	return m_controllerCount;
 }
 
 inline void b2World::SetGravity(const b2Vec2& gravity)

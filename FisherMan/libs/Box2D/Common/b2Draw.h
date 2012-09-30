@@ -38,11 +38,14 @@ public:
 
 	enum
 	{
-		e_shapeBit				= 0x0001,	///< draw shapes
-		e_jointBit				= 0x0002,	///< draw joint connections
-		e_aabbBit				= 0x0004,	///< draw axis aligned bounding boxes
-		e_pairBit				= 0x0008,	///< draw broad-phase pairs
-		e_centerOfMassBit		= 0x0010	///< draw center of mass frame
+		e_shapeBit                      = 0x0001, ///< draw shapes
+        e_jointBit                      = 0x0002, ///< draw joint connections
+        e_coreShapeBit                  = 0x0004, ///< draw core (TOI) shapes
+        e_aabbBit                       = 0x0008, ///< draw axis aligned bounding boxes
+        e_obbBit                        = 0x0010, ///< draw oriented bounding boxes
+        e_pairBit                       = 0x0020, ///< draw broad-phase pairs
+        e_centerOfMassBit               = 0x0040, ///< draw center of mass frame
+        e_controllerBit                 = 0x0080, ///< draw controllers
 	};
 
 	/// Set the drawing flags.
@@ -50,7 +53,7 @@ public:
 
 	/// Get the drawing flags.
 	uint32 GetFlags() const;
-
+	
 	/// Append flags to the current flags.
 	void AppendFlags(uint32 flags);
 
@@ -65,10 +68,10 @@ public:
 
 	/// Draw a circle.
 	virtual void DrawCircle(const b2Vec2& center, float32 radius, const b2Color& color) = 0;
-
+	
 	/// Draw a solid circle.
 	virtual void DrawSolidCircle(const b2Vec2& center, float32 radius, const b2Vec2& axis, const b2Color& color) = 0;
-
+	
 	/// Draw a line segment.
 	virtual void DrawSegment(const b2Vec2& p1, const b2Vec2& p2, const b2Color& color) = 0;
 

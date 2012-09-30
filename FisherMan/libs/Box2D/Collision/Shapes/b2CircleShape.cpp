@@ -98,3 +98,32 @@ void b2CircleShape::ComputeMass(b2MassData* massData, float32 density) const
 	// inertia about the local origin
 	massData->I = massData->mass * (0.5f * m_radius * m_radius + b2Dot(m_p, m_p));
 }
+
+float32 b2CircleShape::ComputeSubmergedArea(const b2Vec2& normal,
+											float32 offset,
+											const b2Transform& xf, 
+											b2Vec2* c) const
+{
+	b2Vec2 p = b2Mul(xf,m_p);
+	float32 l = -(b2Dot(normal,p) - offset);
+	if(l<-m_radius+FLT_EPSILON){
+		//Completely dry
+		return 0;
+	}
+	if(l>m_radius){
+		//Completely wet
+		*c = p;
+		return b2_pi*m_radius*m_radius;
+	}
+	
+	//Magic
+	float32 r2 = m_radius*m_radius;
+	float32 l2 = l*l;
+	float32 area = r2 * (asin(l/m_radius) + b2_pi/2) + l * sqrt(r2 - l2);
+	float32 com = -2.0f/3.0f*pow(r2-l2,1.5f)/area;
+	
+	c->x = p.x + normal.x * com;
+	c->y = p.y + normal.y * com;
+	
+	return area;
+}

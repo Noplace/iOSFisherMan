@@ -513,7 +513,6 @@
 
 #define kQuadSize sizeof(quad_.bl)
 	long offset = (long)&quad_;
-
 	// vertex
 	NSInteger diff = offsetof( ccV3F_C4B_T2F, vertices);
 	glVertexAttribPointer(kCCVertexAttrib_Position, 3, GL_FLOAT, GL_FALSE, kQuadSize, (void*) (offset + diff));

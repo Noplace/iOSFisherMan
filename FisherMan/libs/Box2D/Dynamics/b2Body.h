@@ -22,6 +22,7 @@
 #include <Box2D/Common/b2Math.h>
 #include <Box2D/Collision/Shapes/b2Shape.h>
 #include <memory>
+#include <Box2D/Dynamics/Controllers/b2Controller.h>
 
 class b2Fixture;
 class b2Joint;
@@ -31,6 +32,7 @@ class b2World;
 struct b2FixtureDef;
 struct b2JointEdge;
 struct b2ContactEdge;
+struct b2ControllerEdge;
 
 /// The body type.
 /// static: zero mass, zero velocity, may be manually moved
@@ -291,7 +293,7 @@ public:
 	/// Get the gravity scale of the body.
 	float32 GetGravityScale() const;
 
-	/// Set the gravity scale of the body.
+	/// Set the angular damping of the body.
 	void SetGravityScale(float32 scale);
 
 	/// Set the type of this body. This may alter the mass and velocity.
@@ -354,7 +356,11 @@ public:
 	/// Get the list of all joints attached to this body.
 	b2JointEdge* GetJointList();
 	const b2JointEdge* GetJointList() const;
-
+    
+    /// Get the list of all controllers attached to this body.
+	b2ControllerEdge* GetControllerList();
+    const b2ControllerEdge* GetControllerList() const;
+    
 	/// Get the list of all contacts attached to this body.
 	/// @warning this list changes during the time step and you may
 	/// miss some collisions if you don't use b2ContactListener.
@@ -375,9 +381,6 @@ public:
 	b2World* GetWorld();
 	const b2World* GetWorld() const;
 
-	/// Dump this body to a log file
-	void Dump();
-
 private:
 
 	friend class b2World;
@@ -385,7 +388,7 @@ private:
 	friend class b2ContactManager;
 	friend class b2ContactSolver;
 	friend class b2Contact;
-
+	
 	friend class b2DistanceJoint;
 	friend class b2GearJoint;
 	friend class b2WheelJoint;
@@ -396,7 +399,8 @@ private:
 	friend class b2WeldJoint;
 	friend class b2FrictionJoint;
 	friend class b2RopeJoint;
-
+    friend class b2Controller;
+    
 	// m_flags
 	enum
 	{
@@ -446,6 +450,8 @@ private:
 	b2JointEdge* m_jointList;
 	b2ContactEdge* m_contactList;
 
+    b2ControllerEdge* m_controllerList;
+    
 	float32 m_mass, m_invMass;
 
 	// Rotational inertia about the center of mass.
@@ -477,7 +483,7 @@ inline const b2Vec2& b2Body::GetPosition() const
 
 inline float32 b2Body::GetAngle() const
 {
-	return m_sweep.a;
+	return m_xf.q.GetAngle();
 }
 
 inline const b2Vec2& b2Body::GetWorldCenter() const
@@ -710,6 +716,16 @@ inline b2JointEdge* b2Body::GetJointList()
 inline const b2JointEdge* b2Body::GetJointList() const
 {
 	return m_jointList;
+}
+
+inline b2ControllerEdge* b2Body::GetControllerList()
+{
+	return m_controllerList;
+}
+
+inline const b2ControllerEdge* b2Body::GetControllerList() const
+{
+	return m_controllerList;
 }
 
 inline b2ContactEdge* b2Body::GetContactList()

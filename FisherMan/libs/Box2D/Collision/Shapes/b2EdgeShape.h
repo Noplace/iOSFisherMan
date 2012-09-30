@@ -50,7 +50,13 @@ public:
 
 	/// @see b2Shape::ComputeMass
 	void ComputeMass(b2MassData* massData, float32 density) const;
-
+	
+    /// @see b2Shape::ComputeSubmergedArea
+	float32 ComputeSubmergedArea(const b2Vec2& normal,
+								 float32 offset,
+								 const b2Transform& xf, 
+								 b2Vec2* c) const;
+    
 	/// These are the edge vertices
 	b2Vec2 m_vertex1, m_vertex2;
 
@@ -63,10 +69,6 @@ inline b2EdgeShape::b2EdgeShape()
 {
 	m_type = e_edge;
 	m_radius = b2_polygonRadius;
-	m_vertex0.x = 0.0f;
-	m_vertex0.y = 0.0f;
-	m_vertex3.x = 0.0f;
-	m_vertex3.y = 0.0f;
 	m_hasVertex0 = false;
 	m_hasVertex3 = false;
 }

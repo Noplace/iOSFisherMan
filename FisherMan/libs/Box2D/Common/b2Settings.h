@@ -34,6 +34,10 @@ typedef unsigned int uint32;
 typedef float float32;
 typedef double float64;
 
+#ifndef FLT_EPSILON
+    #define FLT_EPSILON 0.00007f 
+#endif
+
 #define	b2_maxFloat		FLT_MAX
 #define	b2_epsilon		FLT_EPSILON
 #define b2_pi			3.14159265359f
@@ -44,8 +48,7 @@ typedef double float64;
 
 // Collision
 
-/// The maximum number of contact points between two convex shapes. Do
-/// not change this value.
+/// The maximum number of contact points between two convex shapes.
 #define b2_maxManifoldPoints	2
 
 /// The maximum number of vertices on a convex polygon. You cannot increase
@@ -131,9 +134,6 @@ void* b2Alloc(int32 size);
 
 /// If you implement b2Alloc, you should also implement this function.
 void b2Free(void* mem);
-
-/// Logging function.
-void b2Log(const char* string, ...);
 
 /// Version numbering scheme.
 /// See http://en.wikipedia.org/wiki/Software_versioning

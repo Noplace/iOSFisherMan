@@ -6,14 +6,11 @@
 //
 //
 
-#import "cocos2d.h"
-#import "Box2D.h"
-#import "GLES-Render.h"
+#import "GameLayer.h"
 
-@interface BackgroundLayer : CCLayer
-{
-    CGSize size;
-    ccColor4F skyColor;
-    float t;
-}
+@interface BackgroundLayer : GameLayer
+
+
+- (void) update: (ccTime) dt;
+
 @end

@@ -27,23 +27,25 @@
 #include <Box2D/Collision/b2BroadPhase.h>
 #include <Box2D/Collision/Shapes/b2CircleShape.h>
 #include <Box2D/Collision/Shapes/b2EdgeShape.h>
-#include <Box2D/Collision/Shapes/b2ChainShape.h>
+#include <Box2D/Collision/Shapes/b2LoopShape.h>
 #include <Box2D/Collision/Shapes/b2PolygonShape.h>
 #include <Box2D/Collision/b2TimeOfImpact.h>
 #include <Box2D/Common/b2Draw.h>
 #include <Box2D/Common/b2Timer.h>
 #include <new>
 
-b2World::b2World(const b2Vec2& gravity)
+b2World::b2World(const b2Vec2& gravity, bool doSleep)
 {
 	m_destructionListener = NULL;
 	m_debugDraw = NULL;
 
 	m_bodyList = NULL;
 	m_jointList = NULL;
-
-	m_bodyCount = 0;
+    m_controllerList = NULL;
+	
+    m_bodyCount = 0;
 	m_jointCount = 0;
+    m_controllerCount = 0;
 
 	m_warmStarting = true;
 	m_continuousPhysics = true;
@@ -51,7 +53,7 @@ b2World::b2World(const b2Vec2& gravity)
 
 	m_stepComplete = true;
 
-	m_allowSleep = true;
+	m_allowSleep = doSleep;
 	m_gravity = gravity;
 
 	m_flags = e_clearForces;
@@ -154,7 +156,7 @@ void b2World::DestroyBody(b2Body* b)
 		b->m_jointList = je;
 	}
 	b->m_jointList = NULL;
-
+    
 	// Delete the attached contacts.
 	b2ContactEdge* ce = b->m_contactList;
 	while (ce)
@@ -165,6 +167,16 @@ void b2World::DestroyBody(b2Body* b)
 	}
 	b->m_contactList = NULL;
 
+    //Detach controllers attached to this body
+	b2ControllerEdge* control_e = b->m_controllerList;
+	while(control_e)
+	{
+		b2ControllerEdge* control_e0 = control_e;
+		control_e = control_e->nextController;
+		
+		control_e0->controller->RemoveBody(b);
+	}
+    
 	// Delete the attached fixtures. This destroys broad-phase proxies.
 	b2Fixture* f = b->m_fixtureList;
 	while (f)
@@ -364,22 +376,40 @@ void b2World::DestroyJoint(b2Joint* j)
 	}
 }
 
-//
-void b2World::SetAllowSleeping(bool flag)
+b2Controller* b2World::CreateController(b2ControllerDef* def)
 {
-	if (flag == m_allowSleep)
-	{
-		return;
-	}
+	b2Controller* controller = def->Create(&m_blockAllocator);
+	
+	controller->m_next = m_controllerList;
+	controller->m_prev = NULL;
+    
+	if(m_controllerList)
+		m_controllerList->m_prev = controller;
+    
+	m_controllerList = controller;
+	++m_controllerCount;
+	
+	controller->m_world = this;
+	
+	return controller;
+}
 
-	m_allowSleep = flag;
-	if (m_allowSleep == false)
-	{
-		for (b2Body* b = m_bodyList; b; b = b->m_next)
-		{
-			b->SetAwake(true);
-		}
-	}
+void b2World::DestroyController(b2Controller* controller)
+{
+	b2Assert(m_controllerCount>0);
+    
+	if(controller->m_next)
+		controller->m_next->m_prev = controller->m_prev;
+    
+	if(controller->m_prev)
+		controller->m_prev->m_next = controller->m_next;
+    
+	if(controller == m_controllerList)
+		m_controllerList = controller->m_next;
+    
+	--m_controllerCount;
+	
+	b2Controller::Destroy(controller, &m_blockAllocator);
 }
 
 // Find islands, integrate and solve constraints, solve position constraints
@@ -388,6 +418,11 @@ void b2World::Solve(const b2TimeStep& step)
 	m_profile.solveInit = 0.0f;
 	m_profile.solveVelocity = 0.0f;
 	m_profile.solvePosition = 0.0f;
+    
+    for(b2Controller* controller = m_controllerList; controller; controller=controller->m_next)
+	{
+		controller->Step(step);
+	}
 
 	// Size the island for the worst case.
 	b2Island island(m_bodyCount,
@@ -578,6 +613,11 @@ void b2World::SolveTOI(const b2TimeStep& step)
 {
 	b2Island island(2 * b2_maxTOIContacts, b2_maxTOIContacts, 0, &m_stackAllocator, m_contactManager.m_contactListener);
 
+    for(b2Controller* controller = m_controllerList; controller; controller=controller->m_next)
+	{
+		controller->Step(step);
+	}
+    
 	if (m_stepComplete)
 	{
 		for (b2Body* b = m_bodyList; b; b = b->m_next)
@@ -839,7 +879,7 @@ void b2World::SolveTOI(const b2TimeStep& step)
 					{
 						continue;
 					}
-
+					
 					// Add the other body to the island.
 					other->m_flags |= b2Body::e_islandFlag;
 
@@ -923,7 +963,7 @@ void b2World::Step(float32 dt, int32 velocityIterations, int32 positionIteration
 	step.dtRatio = m_inv_dt0 * dt;
 
 	step.warmStarting = m_warmStarting;
-
+	
 	// Update contacts. This is where some contacts are destroyed.
 	{
 		b2Timer timer;
@@ -1053,14 +1093,14 @@ void b2World::DrawShape(b2Fixture* fixture, const b2Transform& xf, const b2Color
 		}
 		break;
 
-	case b2Shape::e_chain:
+	case b2Shape::e_loop:
 		{
-			b2ChainShape* chain = (b2ChainShape*)fixture->GetShape();
-			int32 count = chain->m_count;
-			const b2Vec2* vertices = chain->m_vertices;
+			b2LoopShape* loop = (b2LoopShape*)fixture->GetShape();
+			int32 count = loop->GetCount();
+			const b2Vec2* vertices = loop->GetVertices();
 
-			b2Vec2 v1 = b2Mul(xf, vertices[0]);
-			for (int32 i = 1; i < count; ++i)
+			b2Vec2 v1 = b2Mul(xf, vertices[count - 1]);
+			for (int32 i = 0; i < count; ++i)
 			{
 				b2Vec2 v2 = b2Mul(xf, vertices[i]);
 				m_debugDraw->DrawSegment(v1, v2, color);
@@ -1085,9 +1125,9 @@ void b2World::DrawShape(b2Fixture* fixture, const b2Transform& xf, const b2Color
 			m_debugDraw->DrawSolidPolygon(vertices, vertexCount, color);
 		}
 		break;
-
-    default:
-        break;
+    
+        default:
+            break;
 	}
 }
 
@@ -1180,6 +1220,14 @@ void b2World::DrawDebugData()
 		}
 	}
 
+    if (flags & b2Draw::e_controllerBit)
+    {
+        for (b2Controller* c = m_controllerList; c; c= c->GetNext())
+        {
+            c->Draw(m_debugDraw);
+        }
+    }
+    
 	if (flags & b2Draw::e_pairBit)
 	{
 		b2Color color(0.3f, 0.9f, 0.9f);
@@ -1254,63 +1302,4 @@ int32 b2World::GetTreeBalance() const
 float32 b2World::GetTreeQuality() const
 {
 	return m_contactManager.m_broadPhase.GetTreeQuality();
-}
-
-void b2World::Dump()
-{
-	if ((m_flags & e_locked) == e_locked)
-	{
-		return;
-	}
-
-	b2Log("b2Vec2 g(%.15lef, %.15lef);\n", m_gravity.x, m_gravity.y);
-	b2Log("m_world->SetGravity(g);\n");
-
-	b2Log("b2Body** bodies = (b2Body**)b2Alloc(%d * sizeof(b2Body*));\n", m_bodyCount);
-	b2Log("b2Joint** joints = (b2Joint**)b2Alloc(%d * sizeof(b2Joint*));\n", m_jointCount);
-	int32 i = 0;
-	for (b2Body* b = m_bodyList; b; b = b->m_next)
-	{
-		b->m_islandIndex = i;
-		b->Dump();
-		++i;
-	}
-
-	i = 0;
-	for (b2Joint* j = m_jointList; j; j = j->m_next)
-	{
-		j->m_index = i;
-		++i;
-	}
-
-	// First pass on joints, skip gear joints.
-	for (b2Joint* j = m_jointList; j; j = j->m_next)
-	{
-		if (j->m_type == e_gearJoint)
-		{
-			continue;
-		}
-
-		b2Log("{\n");
-		j->Dump();
-		b2Log("}\n");
-	}
-
-	// Second pass on joints, only gear joints.
-	for (b2Joint* j = m_jointList; j; j = j->m_next)
-	{
-		if (j->m_type != e_gearJoint)
-		{
-			continue;
-		}
-
-		b2Log("{\n");
-		j->Dump();
-		b2Log("}\n");
-	}
-
-	b2Log("b2Free(joints);\n");
-	b2Log("b2Free(bodies);\n");
-	b2Log("joints = NULL;\n");
-	b2Log("bodies = NULL;\n");
 }

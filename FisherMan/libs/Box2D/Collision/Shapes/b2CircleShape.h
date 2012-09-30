@@ -46,6 +46,12 @@ public:
 	/// @see b2Shape::ComputeMass
 	void ComputeMass(b2MassData* massData, float32 density) const;
 
+    /// @see b2Shape::ComputeSubmergedArea
+	float32 ComputeSubmergedArea(const b2Vec2& normal,
+								 float32 offset,
+								 const b2Transform& xf, 
+								 b2Vec2* c) const;
+    
 	/// Get the supporting vertex index in the given direction.
 	int32 GetSupport(const b2Vec2& d) const;
 
