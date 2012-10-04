@@ -1,6 +1,6 @@
 //
 //  BackgroundLayer.m
-//  FisherMan
+//  Pick a Fish
 //
 //  Created by Khalid Al-Kooheji on 9/22/12.
 //
@@ -37,10 +37,16 @@ ccColor4F colorLerp4F(const ccColor4F& a, const ccColor4F& b,float t)
 {
     CCSpriteBatchNode* cloudsParent;
     CCTexture2D* cloudsTexture;
+    float cloudsIntensity;
+    BOOL cloudsEnable;
+    float cloudsOpacity;
+    ccTime cloudTimer_;
+    
     CCSprite* sunSprite;
     CCSprite* moonSprite;
     CCSprite* skyDaySprite;
     CCSprite* skyNightSprite;
+
     int skyPhase;
     float skyTime;
     float sunTime;
@@ -69,7 +75,7 @@ ccColor4F colorLerp4F(const ccColor4F& a, const ccColor4F& b,float t)
 	if( (self=[super init])) {
         size = [CCDirector sharedDirector].winSize;
         
-        self.isTouchEnabled = NO;//NO
+        self.isTouchEnabled = YES;//NO
 		self.isAccelerometerEnabled = NO;//NO
         skyPhase=3;
         skyTime = 0.0f;
@@ -95,7 +101,11 @@ ccColor4F colorLerp4F(const ccColor4F& a, const ccColor4F& b,float t)
         
         cloudsParent = [CCSpriteBatchNode batchNodeWithFile:@"clouds.png" capacity:100];
 		cloudsTexture = [cloudsParent texture];
+        cloudsOpacity = 0;
+    
+        
        
+        
         [self addChild:skyDaySprite z:-1];
         [self addChild:skyNightSprite z:-1];
         [self addChild:sunSprite z:0];
@@ -109,6 +119,21 @@ ccColor4F colorLerp4F(const ccColor4F& a, const ccColor4F& b,float t)
 -(void) dealloc
 {
 	[super dealloc];
+}
+
+- (void) resetCloudsTimer
+{
+    cloudTimer_ = CCRANDOM_0_1()*timeRatio*(1.0001f-cloudsIntensity);
+}
+
+- (void) setWeatherCondition: (WeatherCondition) cond Enable:(BOOL) enable Intensity: (float) intensity
+{
+    if (cond == kWeatherConditionClouds)
+    {
+        cloudsIntensity = intensity;
+        cloudsEnable = enable;
+        [self resetCloudsTimer];
+    }
 }
 
 
@@ -127,36 +152,6 @@ ccColor4F colorLerp4F(const ccColor4F& a, const ccColor4F& b,float t)
     
 }
 
-
-- (void) addCloud:(ccTime) dt location:(CGPoint) location
-{
-    int idx = (CCRANDOM_0_1() > .5 ? 0:1);
-	int idy = (CCRANDOM_0_1() > .5 ? 0:1);
-    PhysicsSprite* cloudSprite = [PhysicsSprite spriteWithTexture:cloudsTexture rect:CGRectMake(idx*128,idy*64,128,64)];
-    [cloudsParent addChild: cloudSprite];
-    
-    
-    float randY = (random() % (int)size.height) * 0.32f;
-    cloudSprite.position = ccp(size.width+128,size.height-32-randY);
-    
-    
-    
-    b2BodyDef bodyDef;
-	bodyDef.type = b2_kinematicBody;
-	bodyDef.position.Set(cloudSprite.position.x/PTM_RATIO,cloudSprite.position.y/PTM_RATIO);
-	b2Body *body = world_->CreateBody(&bodyDef);
-    b2Vec2 newVelocity = b2Vec2(-120.0f*dt,0);
-    body->SetLinearVelocity( newVelocity );
-    
-	[cloudSprite setPhysicsBody:body];
-    
-    
-    //id moveAction = [CCMoveTo actionWithDuration:3600.0f*dt position:ccp(-128,size.height-32-randY)];
-    
-    //[cloudSprite runAction:moveAction];
-    
-   
-}
 
 - (void) updateSun:(ccTime) dt
 {
@@ -220,12 +215,40 @@ ccColor4F colorLerp4F(const ccColor4F& a, const ccColor4F& b,float t)
     skyTime+=dt;
 }
 
+
+
+
+- (void) addCloud:(ccTime) dt location:(CGPoint) location
+{
+    int idx = (CCRANDOM_0_1() > .5 ? 0:1);
+	int idy = (CCRANDOM_0_1() > .5 ? 0:1);
+    PhysicsSprite* cloudSprite = [PhysicsSprite spriteWithTexture:cloudsTexture rect:CGRectMake(idx*128,idy*64,128,64)];
+    [cloudsParent addChild: cloudSprite];
+    
+    
+    float randY = (random() % (int)size.height) * 0.32f;
+    cloudSprite.position = ccp(size.width+128,size.height-32-randY);
+    
+    b2BodyDef bodyDef;
+	bodyDef.type = b2_kinematicBody;
+	bodyDef.position.Set(cloudSprite.position.x/PTM_RATIO,cloudSprite.position.y/PTM_RATIO);
+	b2Body *body = world_->CreateBody(&bodyDef);
+    b2Vec2 newVelocity = b2Vec2(-260.0f*dt/timeRatio,0);
+    body->SetLinearVelocity( newVelocity );
+    
+	[cloudSprite setPhysicsBody:body];
+}
+
 - (void) updateClouds: (ccTime) dt
 {
-    if (random() % 10000 > 9900)
+    cloudTimer_ -= dt;
+    //if (random() % 10000 > 9900)
+    if (cloudTimer_ <= 0.0f)
     {
-        [self addCloud:dt location:CGPointMake(0,0)];
-        //srandom(time(NULL));
+        [self resetCloudsTimer];
+        if (cloudsEnable)
+            [self addCloud:dt location:CGPointMake(0,0)];
+       
         
         for (int i=0;i<[cloudsParent.children count];++i)
         {
@@ -241,7 +264,37 @@ ccColor4F colorLerp4F(const ccColor4F& a, const ccColor4F& b,float t)
             }
         }
     }
+    
+    
+
+    if (cloudsEnable)
+    {
+        if (cloudsOpacity < 1.0f)
+        {
+            cloudsOpacity = MIN(cloudsOpacity+dt,1.0f);
+            for(CCSprite* sprite in [cloudsParent children])
+            {
+                sprite.opacity = cloudsOpacity*255;
+            }
+        }
+        else
+            cloudsOpacity = 1.0f;
+    }
+    else
+    {
+        if (cloudsOpacity > 0.0f)
+        {
+            cloudsOpacity = MAX(cloudsOpacity-dt,0.0f);
+            for(CCSprite* sprite in [cloudsParent children])
+            {
+                sprite.opacity = cloudsOpacity*255;
+            }
+        }
+        else
+            cloudsOpacity = 0.0f;
+    }
 }
+
 
 - (void) update: (ccTime) dt
 {
@@ -255,10 +308,10 @@ ccColor4F colorLerp4F(const ccColor4F& a, const ccColor4F& b,float t)
 {
 	//Add a new body/atlas sprite at the touched location
 	for( UITouch *touch in touches ) {
-		CGPoint location = [touch locationInView: [touch view]];
+		//CGPoint location = [touch locationInView: [touch view]];
 		
-		location = [[CCDirector sharedDirector] convertToGL: location];
-		
+		//location = [[CCDirector sharedDirector] convertToGL: location];
+		//[self setWeatherCondition:kWeatherConditionRain Enable:NO Intensity:1.0f];
 		//[self addCloud:0 location:location];
 	}
 }

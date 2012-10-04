@@ -1,6 +1,6 @@
 //
 //  HelloWorldLayer.h
-//  FisherMan
+//  Pick a Fish
 //
 //  Created by Khalid Al-Kooheji on 9/21/12.
 //  Copyright __MyCompanyName__ 2012. All rights reserved.
@@ -14,14 +14,8 @@
 
 // HelloWorldLayer
 @interface SeaLayer : GameLayer
-{
-	CCTexture2D *spriteTexture_;	// weak ref
-    CCSpriteBatchNode *seaObjectsParentNode;
-    CCSpriteBatchNode* seaParentNode;
-    CCSprite* seaSprite[4];
-}
 
 
 - (void) update: (ccTime) dt;
-
+- (void) setWeatherCondition: (WeatherCondition) cond Enable:(BOOL) enable Intensity: (float) intensity;
 @end

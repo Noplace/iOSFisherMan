@@ -1,6 +1,6 @@
 //
 //  GameScene.m
-//  FisherMan
+//  Pick a Fish
 //
 //  Created by Khalid Al-Kooheji on 9/22/12.
 //
@@ -14,9 +14,12 @@
 {
     BackgroundLayer *bgLayer;
     SeaLayer *seaLayer;
+    CCParticleSystem* rainEmitter;
     ccTime timeOfDay_;
     float gameSpeed_;
+    float timeLeft_;
     CCLabelTTF* debugLabel;
+    CCLabelBMFont *timeLeftLabel;
 }
 -(void) initPhysics;
 +(CCRenderTexture*) createStroke: (CCLabelTTF*) label   size:(float)size   color:(ccColor3B)cor;
@@ -41,10 +44,25 @@
         seaLayer = [SeaLayer nodeWithWorld:world];
        
         
+        [self initRain];
+        [self setWeatherCondition:kWeatherConditionClouds Enable:YES Intensity:0.5f];
+        [self setWeatherCondition:kWeatherConditionRain Enable:YES Intensity:1.0f];
+        [self setWeatherCondition:kWeatherConditionWind Enable:YES Intensity:1.0f];
+      
+        
+        
         debugLabel = [CCLabelTTF labelWithString:@"" fontName:@"Arial" fontSize:12];
         debugLabel.anchorPoint = ccp(0,0);
         debugLabel.position = ccp(0,size.height-20);
         [self addChild:debugLabel z:100];
+        
+        timeLeftLabel = [CCLabelBMFont labelWithString:@"Pick a Fish!" fntFile:@"font-title.fnt"];
+        //timeLeftLabel = [CCLabelTTF labelWithString:@"Pick a Fish!" fontName:@"Verdana" fontSize:32];
+		[self addChild:timeLeftLabel z:100];
+		//[timeLeftLabel setColor:ccc3(0,165,125)];
+		timeLeftLabel.position = ccp( size.width/2, size.height-50);
+		
+        timeLeft_ = 10;
         
         [self update:1.0f/60.0f];
         [self addChild:bgLayer z:0];        
@@ -57,10 +75,27 @@
 }
 
 
+- (void) initRain
+{
+    rainEmitter = [CCParticleRain node];
+    
+    [bgLayer addChild: rainEmitter z:10];
+    
+    CGPoint p = rainEmitter.position;
+    
+    rainEmitter.position = ccp( p.x, p.y);
+    rainEmitter.life = 7;
+    rainEmitter.emissionRate = 20;
+    rainEmitter.speed = 2;
+    rainEmitter.texture = [[CCTextureCache sharedTextureCache] addImage: @"Raindrop.png"];
+    rainEmitter.startSize = 10.0f;
+    [rainEmitter stopSystem];
+}
+
 -(void) initPhysics
 {
     timer_accumulator_ = 0;
-	timeOfDay_ = sunriseStart+3;
+	timeOfDay_ = sunriseStart+3*timeRatio;
 	CGSize s = [[CCDirector sharedDirector] winSize];
 	
 	b2Vec2 gravity;
@@ -187,6 +222,20 @@
 	//kmGLPopMatrix();
 }
 
+- (void) setWeatherCondition: (WeatherCondition) cond Enable:(BOOL) enable Intensity: (float) intensity
+{
+    if (cond == kWeatherConditionRain)
+    {
+        rainEmitter.emissionRate = intensity * 50.0f;
+        if (enable == YES)
+            [rainEmitter resetSystem];
+        else
+            [rainEmitter stopSystem];
+    }
+    [bgLayer setWeatherCondition:cond Enable:enable Intensity:intensity];
+    [seaLayer setWeatherCondition:cond Enable:enable Intensity:intensity];
+}
+
 - (void) update: (ccTime) dt
 {
     const ccTime fixed_dt_ = 1.0f/60.0f;
@@ -197,7 +246,10 @@
     
     while ( timer_accumulator_ >= fixed_dt_ )
     {
-        [debugLabel setString:[NSString stringWithFormat:@"time of day: %03.3f",timeOfDay_]];
+        [debugLabel setString:[NSString stringWithFormat:@"time of day: %03.3f",timeOfDay_/timeRatio]];
+        [timeLeftLabel setString:[NSString stringWithFormat:@"%03.0f ",timeLeft_]];
+        timeLeft_ -= fixed_dt_;
+        
         bgLayer.timeOfDay = timeOfDay_;
         seaLayer.timeOfDay = timeOfDay_;
         [bgLayer update:fixed_dt_*gameSpeed_];
@@ -208,17 +260,23 @@
         
         timeOfDay_ += fixed_dt_*gameSpeed_;
         if (timeOfDay_ > daySeconds)
+        {
             timeOfDay_ = 0.0f;
+            [self setWeatherCondition:kWeatherConditionClouds Enable:NO Intensity:0.5f];
+            [self setWeatherCondition:kWeatherConditionRain Enable:NO Intensity:1.0f];
+            [self setWeatherCondition:kWeatherConditionWind Enable:YES Intensity:0.2f];
+        }
         timer_accumulator_ -= fixed_dt_;
     }
 	
 }
 
+
 - (void)showConfirmAlert
 {
     
-    
-    
+    [rainEmitter pauseSchedulerAndActions];
+    [self pauseSchedulerAndActions];
 	UIAlertView *alert = [[UIAlertView alloc] init];
 	[alert setTitle:@"Confirm"];
 	[alert setMessage:@"Are you sure you want to quit your game and go back to the main menu?"];
@@ -233,23 +291,26 @@
 {
 	if (buttonIndex == 0)
 	{
-		[[CCDirector sharedDirector] replaceScene:[CCTransitionRotoZoom transitionWithDuration:1.0 scene:[MainMenuLayer scene]]];
+		//[[CCDirector sharedDirector] replaceScene:[CCTransitionRotoZoom transitionWithDuration:1.0 scene:[MainMenuLayer scene]]];
+    	[[CCDirector sharedDirector] replaceScene:[CCTransitionFade transitionWithDuration:1.0 scene:[MainMenuLayer scene] withColor:ccWHITE]];
 	}
 	else if (buttonIndex == 1)
 	{
-		// No
+        [rainEmitter resumeSchedulerAndActions];
+		[self resumeSchedulerAndActions];
 	}
 }
 
 -(void) dealloc
 {
+    [super dealloc];
+    
 	delete world;
 	world = NULL;
 	
 	delete m_debugDraw;
 	m_debugDraw = NULL;
 	
-	[super dealloc];
 }
 
 @end

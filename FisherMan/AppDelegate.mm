@@ -1,6 +1,6 @@
 //
 //  AppDelegate.mm
-//  FisherMan
+//  Pick a Fish
 //
 //  Created by Khalid Al-Kooheji on 9/21/12.
 //  Copyright __MyCompanyName__ 2012. All rights reserved.

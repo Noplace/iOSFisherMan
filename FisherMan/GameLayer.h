@@ -1,6 +1,6 @@
 //
 //  GameLayer.h
-//  FisherMan
+//  Pick a Fish
 //
 //  Created by Khalid Al-Kooheji on 9/26/2012.
 //
@@ -11,13 +11,22 @@
 #import "GLES-Render.h"
 #import "PhysicsSprite.h"
 
-const float daySeconds = 24.0f;
+
+enum WeatherCondition {
+	kWeatherConditionClouds,
+    kWeatherConditionRain,
+    kWeatherConditionWind,
+};
+
+
+const float timeRatio = 1;
+const float daySeconds = 24.0f*timeRatio;
 const float phaseSeconds = daySeconds/4.0f;
 
-const float sunriseStart = 5.0f;
-const float sunriseDuration = 6.0f;
-const float sunsetStart = 17.0f;
-const float sunsetDuration = 2.0f;
+const float sunriseStart = 5.0f*timeRatio;
+const float sunriseDuration = 6.0f*timeRatio;
+const float sunsetStart = 17.0f*timeRatio;
+const float sunsetDuration = 2.0f*timeRatio;
 
 //Pixel to metres ratio. Box2D uses metres as the unit for measurement.
 //This ratio defines how many pixels correspond to 1 Box2D "metre"

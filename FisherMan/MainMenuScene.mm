@@ -1,6 +1,6 @@
 //
 //  HelloWorldLayer.mm
-//  FisherMan
+//  Pick a Fish
 //
 //  Created by Khalid Al-Kooheji on 9/21/12.
 //  Copyright __MyCompanyName__ 2012. All rights reserved.
@@ -13,9 +13,11 @@
 #import "AppDelegate.h"
 
 
-
-
-#pragma mark - MainMenuLayer
+enum {
+  kMenu,
+  kMenuItemAchievements,
+  kMenuItemLeaderboard,
+};
 
 @interface MainMenuLayer()
 -(void) createMenu;
@@ -42,6 +44,7 @@
 {
 	if( (self=[super init])) {
 		
+        [self authenticateLocalPlayer];
 		// enable events
 		
 		self.isTouchEnabled = YES;
@@ -55,10 +58,10 @@
 		//Set up sprite
 		
 
-		CCLabelTTF *label = [CCLabelTTF labelWithString:@"Pick a Fish!" fontName:@"Verdana" fontSize:32];
-		[self addChild:label z:0];
-		[label setColor:ccc3(0,165,125)];
-		label.position = ccp( s.width/2, s.height-50);
+		//CCLabelTTF *label = [CCLabelTTF labelWithString:@"Pick a Fish!" fontName:@"Verdana" fontSize:32];
+        CCLabelBMFont* gameTitleLabel = [CCLabelBMFont labelWithString:@"Pick a Fish!" fntFile:@"font-title1.fnt"];
+		[self addChild:gameTitleLabel z:0];
+		gameTitleLabel.position = ccp( s.width/2, s.height-64);
 		
 		[self scheduleUpdate];
 	}
@@ -80,6 +83,8 @@
 	CCMenuItemLabel *startGame = [CCMenuItemFont itemWithString:@"Start Game" block:^(id sender){
 		[[CCDirector sharedDirector] replaceScene: [GameScene node]];
 	}];
+    
+    
 	
 	// Achievement Menu Item using blocks
 	CCMenuItem *itemAchievement = [CCMenuItemFont itemWithString:@"Achievements" block:^(id sender) {
@@ -94,7 +99,7 @@
 		
 		[achivementViewController release];
 	}];
-	
+	[itemAchievement setTag:kMenuItemAchievements];
 	// Leaderboard Menu Item using blocks
 	CCMenuItem *itemLeaderboard = [CCMenuItemFont itemWithString:@"Leaderboard" block:^(id sender) {
 		
@@ -108,7 +113,7 @@
 		
 		[leaderboardViewController release];
 	}];
-	
+	[itemLeaderboard setTag:kMenuItemLeaderboard];
 	CCMenu *menu = [CCMenu menuWithItems:startGame,itemAchievement, itemLeaderboard, nil];
 	
 	[menu alignItemsVertically];
@@ -117,7 +122,7 @@
 	[menu setPosition:ccp( size.width/2, size.height/2)];
 	
 	
-	[self addChild: menu z:-1];
+	[self addChild: menu z:-1 tag:kMenu];
 }
 
 -(void) draw
@@ -169,7 +174,39 @@
 	}
 }
 
-#pragma mark GameKit delegate
+- (void) authenticateLocalPlayer
+{
+    GKLocalPlayer *localPlayer = [GKLocalPlayer localPlayer];
+    localPlayer.authenticateHandler = ^(UIViewController *viewController, NSError *error){
+        if (viewController != nil)
+        {
+            //[viewController sho
+            //[self showAuthenticationDialogWhenReasonable: viewController];
+            AppController *app = (AppController*) [[UIApplication sharedApplication] delegate];
+            
+            [[app navController] presentModalViewController:viewController animated:YES];
+            
+        }
+        else if (localPlayer.isAuthenticated)
+        {
+            //gameCenter = true;
+            //[self authenticatedPlayer: localPlayer];
+        }
+        else
+        {
+            //[self disableGameCenter];
+            CCMenu* menu = (CCMenu*)[self getChildByTag:kMenu];
+            CCMenuItem* item1 = (CCMenuItem*)(CCMenuItem*)[menu getChildByTag:kMenuItemAchievements];
+            CCMenuItem* item2 = (CCMenuItem*)[menu getChildByTag:kMenuItemLeaderboard];
+            [item1 setIsEnabled:NO];
+            [item2 setIsEnabled:NO];
+            
+            //gameCenter = false;
+            //[[menu getChildByTag:kMenuItemAchievements]
+        }
+    };
+}
+
 
 -(void) achievementViewControllerDidFinish:(GKAchievementViewController *)viewController
 {

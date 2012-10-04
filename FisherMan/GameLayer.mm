@@ -1,6 +1,6 @@
 //
 //  GameLayer.m
-//  FisherMan
+//  Pick a Fish
 //
 //  Created by Khalid Al-Kooheji on 9/26/2012.
 //

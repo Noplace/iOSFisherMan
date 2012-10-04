@@ -1,6 +1,6 @@
 //
 //  GameScene.h
-//  FisherMan
+//  Pick a Fish
 //
 //  Created by Khalid Al-Kooheji on 9/22/12.
 //

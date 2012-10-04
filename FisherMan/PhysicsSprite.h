@@ -13,5 +13,8 @@
 {
 @public	b2Body *body_;	// strong ref
 }
+
+@property ccTime timeAlive;
+
 -(void) setPhysicsBody:(b2Body*)body;
 @end
