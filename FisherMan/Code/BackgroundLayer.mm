@@ -9,29 +9,7 @@
 #import "BackgroundLayer.h"
 
 
-uint8_t lerpu8(uint8_t a,uint8_t b,float t)
-{
-    return a+t*(b - a);
-}
 
-ccColor3B colorLerp3B(const ccColor3B& a, const ccColor3B& b,float t)
-{
-    ccColor3B res;
-    res.r = a.r+t*(b.r - a.r);
-    res.g = a.g+t*(b.g - a.g);
-    res.b = a.b+t*(b.b - a.b);
-    return res;
-}
-
-ccColor4F colorLerp4F(const ccColor4F& a, const ccColor4F& b,float t)
-{
-    ccColor4F res;
-    res.r = a.r+t*(b.r - a.r);
-    res.g = a.g+t*(b.g - a.g);
-    res.b = a.b+t*(b.b - a.b);
-    res.a = a.a+t*(b.a - a.a);
-    return res;
-}
 
 @interface BackgroundLayer()
 {
@@ -128,10 +106,13 @@ ccColor4F colorLerp4F(const ccColor4F& a, const ccColor4F& b,float t)
 
 - (void) setWeatherCondition: (WeatherCondition) cond Enable:(BOOL) enable Intensity: (float) intensity
 {
-    if (cond == kWeatherConditionClouds)
+    if (cond == kWeatherConditionClouds && cloudsEnable != enable)
     {
         cloudsIntensity = intensity;
         cloudsEnable = enable;
+        id ca = [CCActionTween actionWithDuration:120*(1/60.0f) key:@"cloudsOpacity" from:(float)!cloudsEnable to:(float)(cloudsEnable)];
+        [self runAction:ca];
+        
         [self resetCloudsTimer];
     }
 }
@@ -266,8 +247,11 @@ ccColor4F colorLerp4F(const ccColor4F& a, const ccColor4F& b,float t)
     }
     
     
-
-    if (cloudsEnable)
+    for(CCSprite* sprite in [cloudsParent children])
+    {
+        sprite.opacity = cloudsOpacity*255;
+    }
+    /*if (cloudsEnable)
     {
         if (cloudsOpacity < 1.0f)
         {
@@ -292,7 +276,7 @@ ccColor4F colorLerp4F(const ccColor4F& a, const ccColor4F& b,float t)
         }
         else
             cloudsOpacity = 0.0f;
-    }
+    }*/
 }
 
 

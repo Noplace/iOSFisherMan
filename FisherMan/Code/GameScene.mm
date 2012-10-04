@@ -12,6 +12,7 @@
 
 @interface GameScene()
 {
+    int level;
     BackgroundLayer *bgLayer;
     SeaLayer *seaLayer;
     CCParticleSystem* rainEmitter;
@@ -20,6 +21,7 @@
     float timeLeft_;
     CCLabelTTF* debugLabel;
     CCLabelBMFont *timeLeftLabel;
+    CGSize size;
 }
 -(void) initPhysics;
 +(CCRenderTexture*) createStroke: (CCLabelTTF*) label   size:(float)size   color:(ccColor3B)cor;
@@ -29,25 +31,37 @@
 
 @implementation GameScene
 
+const ccTime fixed_dt_ = 1.0f/60.0f;
+
++(CCScene *) scene: (int) level
+{
+
+	GameScene *scene = [GameScene node];
+	scene->level = level;
+    [scene startGame];
+	return scene;
+}
+
 -(id)init
 {
     
     self = [super init];
     if (self != nil)
     {
+        level = 0;
         srandom(time(NULL));
-        CGSize size = [CCDirector sharedDirector].winSize;
+        size = [CCDirector sharedDirector].winSize;
         gameSpeed_ = 1.0f;
         [self initPhysics];
     
         bgLayer = [BackgroundLayer nodeWithWorld:world];
         seaLayer = [SeaLayer nodeWithWorld:world];
-       
+        seaLayer->windIntensity = 1.1f;
         
         [self initRain];
         [self setWeatherCondition:kWeatherConditionClouds Enable:YES Intensity:0.5f];
         [self setWeatherCondition:kWeatherConditionRain Enable:YES Intensity:1.0f];
-        [self setWeatherCondition:kWeatherConditionWind Enable:YES Intensity:1.0f];
+        [self setWeatherCondition:kWeatherConditionWind Enable:YES Intensity:seaLayer->windIntensity];
       
         
         
@@ -56,24 +70,50 @@
         debugLabel.position = ccp(0,size.height-20);
         [self addChild:debugLabel z:100];
         
-        timeLeftLabel = [CCLabelBMFont labelWithString:@"Pick a Fish!" fntFile:@"font-title.fnt"];
-        //timeLeftLabel = [CCLabelTTF labelWithString:@"Pick a Fish!" fontName:@"Verdana" fontSize:32];
-		[self addChild:timeLeftLabel z:100];
-		//[timeLeftLabel setColor:ccc3(0,165,125)];
-		timeLeftLabel.position = ccp( size.width/2, size.height-50);
+        timeLeftLabel = [CCLabelBMFont labelWithString:@"99:99" fntFile:@"font-level.fnt"];
+        [self addChild:timeLeftLabel z:100];
+		timeLeftLabel.anchorPoint = ccp(0,0);
+        timeLeftLabel.position = ccp(0, size.height-timeLeftLabel.contentSize.height);
+
 		
-        timeLeft_ = 10;
+
         
-        [self update:1.0f/60.0f];
+        
         [self addChild:bgLayer z:0];        
         [self addChild:seaLayer z:1];
         [self createMenu];
-        [self scheduleUpdate];
+        
+        
+        
         return self;
     }
     return nil;
 }
 
+- (void) startGame
+{
+    timeLeft_ = 100;
+    [self update:fixed_dt_];
+    [self scheduleUpdate];
+    [[GameManager sharedGameManager] playBackgroundTrack:@"sea-waves-aifc"];
+    {
+        CCLabelBMFont* levelLabel = [CCLabelBMFont labelWithString:[NSString stringWithFormat:@"Level %d",level] fntFile:@"font-title1.fnt"];
+        [levelLabel setScale:1];
+		[self addChild:levelLabel z:100];
+		levelLabel.position = ccp(size.width/2, size.height/2);
+        
+
+        id delay1 = [CCDelayTime actionWithDuration:2.0f];
+        id fade1 = [CCFadeOut actionWithDuration:1.0f];
+        id seqAction = [CCSequence actions:delay1,fade1,nil];
+        [levelLabel runAction:seqAction];
+    }
+}
+
+- (void) stopGame
+{
+    [[GameManager sharedGameManager] playBackgroundTrack:nil];
+}
 
 - (void) initRain
 {
@@ -238,7 +278,7 @@
 
 - (void) update: (ccTime) dt
 {
-    const ccTime fixed_dt_ = 1.0f/60.0f;
+    
     timer_accumulator_ += dt;
     
     int32 velocityIterations = 8;
@@ -292,7 +332,8 @@
 	if (buttonIndex == 0)
 	{
 		//[[CCDirector sharedDirector] replaceScene:[CCTransitionRotoZoom transitionWithDuration:1.0 scene:[MainMenuLayer scene]]];
-    	[[CCDirector sharedDirector] replaceScene:[CCTransitionFade transitionWithDuration:1.0 scene:[MainMenuLayer scene] withColor:ccWHITE]];
+    	//[[CCDirector sharedDirector] replaceScene:[CCTransitionFade transitionWithDuration:1.0 scene:[MainMenuScene scene] withColor:ccWHITE]];
+        [[GameManager sharedGameManager] runSceneWithID:kMainMenuScene];
 	}
 	else if (buttonIndex == 1)
 	{
@@ -303,6 +344,7 @@
 
 -(void) dealloc
 {
+    [self stopGame];
     [super dealloc];
     
 	delete world;

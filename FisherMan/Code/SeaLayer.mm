@@ -53,7 +53,6 @@ public:
     CCSpriteBatchNode *seaObjectsParentNode;
     CCSpriteBatchNode* seaParentNode;
     CCSprite* seaSprite[4];
-    float windIntensity;
     b2BuoyancyController* seaBC;
     
     
@@ -68,8 +67,8 @@ public:
     float waveTime_[4];
     float waveYTime_;
 }
--(void) initPhysics;
--(void) addNewSpriteAtPosition:(CGPoint)p;
+//-(void) initPhysics;
+//-(void) addNewSpriteAtPosition:(CGPoint)p;
 -(void) updateSea:(ccTime) dt;
 @end
 
@@ -87,7 +86,7 @@ public:
 	if( (self=[super init])) {
 		
 		// enable events
-		
+		windIntensity = 0;
 		self.isTouchEnabled = YES;
 		self.isAccelerometerEnabled = YES;
 		size = [CCDirector sharedDirector].winSize;
@@ -156,14 +155,8 @@ public:
 
 -(void) draw
 {
-	//
-	// IMPORTANT:
-	// This is only for debug purposes
-	// It is recommend to disable it
-	//
 	[super draw];
     //[fishingRod.rope debugDraw:nil];
-
 }
 
 -(void) myMethod:(CCNode*)node data:(int)number {
@@ -176,9 +169,11 @@ public:
     {
         //CCCallFuncND* myAction = [CCCallFuncND actionWithTarget:self selector:@selector(myMethod:data:) data:(void*)123];
         //CCFiniteTimeAction c;
-        windIntensity = intensity*2;
-        
-        
+        float oldValue = MAX(windIntensity,0.01f);
+        //windIntensity = intensity*2;
+        //should replace with dt value
+        id modifyWind = [CCActionTween actionWithDuration:120*(1/60.0f) key:@"windIntensity" from:oldValue to:intensity];
+        [self runAction:modifyWind];
     }
 }
 
@@ -293,7 +288,7 @@ public:
     static const CGFloat dir[4] = {-1,1,-1,1};
     static const CGFloat freq[4] = {1.3f,1.5f,0.8f,0.5f};
     static const CGFloat phase[4] = {kmPI*0.25f,0,kmPI,0};
-    const float freqY = 0.2f*windIntensity;
+    const float freqY = 0.2f;
     float dispX = windIntensity*0.5f*(size.width*2.0f)/4;
     float rangeX = dispX/2;
     
@@ -302,9 +297,10 @@ public:
     
     for (int i=0;i<4;++i)
     {
-        float freqX = freq[i]*windIntensity;
+        float freqX = freq[i];
+        float ampY = amp[i]*windIntensity;
         lastx[i] = seaSprite[i].position.x;
-        seaSprite[i].position = ccp(dispX+dir[i]*(sin((2*kmPI*waveTime_[i]*freqX)+phase[i])*rangeX),pos[i]+sin(2*kmPI*waveYTime_*freqY)*amp[i]);
+        seaSprite[i].position = ccp(dispX+dir[i]*(sin((2*kmPI*waveTime_[i]*freqX)+phase[i])*rangeX),pos[i]+sin(2*kmPI*waveYTime_*freqY)*ampY);
         dx += seaSprite[i].position.x - lastx[i];
         waveTime_[i] += dt*0.2f;
         waveYTime_ += dt*0.2f;

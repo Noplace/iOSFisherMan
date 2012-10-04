@@ -14,10 +14,11 @@
 
 @interface GameScene : CCScene <UIAlertViewDelegate>
 {
+    
     GLESDebugDraw *m_debugDraw;		// strong ref
     b2World* world;
     ccTime timer_accumulator_;
 }
--(id)init;
 
++(CCScene *) scene: (int) level;
 @end

@@ -14,8 +14,9 @@
 
 // HelloWorldLayer
 @interface SeaLayer : GameLayer
-
-
+{
+@public    float windIntensity;
+}
 - (void) update: (ccTime) dt;
 - (void) setWeatherCondition: (WeatherCondition) cond Enable:(BOOL) enable Intensity: (float) intensity;
 @end

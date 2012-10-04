@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "6578318B160C3CFA00059086"
-               BuildableName = "FisherMan.app"
-               BlueprintName = "FisherMan"
-               ReferencedContainer = "container:FisherMan.xcodeproj">
+               BuildableName = "Pick a Fish.app"
+               BlueprintName = "Pick a Fish"
+               ReferencedContainer = "container:Pick a Fish.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -33,9 +33,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "6578318B160C3CFA00059086"
-            BuildableName = "FisherMan.app"
-            BlueprintName = "FisherMan"
-            ReferencedContainer = "container:FisherMan.xcodeproj">
+            BuildableName = "Pick a Fish.app"
+            BlueprintName = "Pick a Fish"
+            ReferencedContainer = "container:Pick a Fish.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
    </TestAction>
@@ -52,9 +52,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "6578318B160C3CFA00059086"
-            BuildableName = "FisherMan.app"
-            BlueprintName = "FisherMan"
-            ReferencedContainer = "container:FisherMan.xcodeproj">
+            BuildableName = "Pick a Fish.app"
+            BlueprintName = "Pick a Fish"
+            ReferencedContainer = "container:Pick a Fish.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
@@ -70,9 +70,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "6578318B160C3CFA00059086"
-            BuildableName = "FisherMan.app"
-            BlueprintName = "FisherMan"
-            ReferencedContainer = "container:FisherMan.xcodeproj">
+            BuildableName = "Pick a Fish.app"
+            BlueprintName = "Pick a Fish"
+            ReferencedContainer = "container:Pick a Fish.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

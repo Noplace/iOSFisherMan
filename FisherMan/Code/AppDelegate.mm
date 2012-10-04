@@ -17,6 +17,9 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    
+    [[GameManager sharedGameManager] setupAudioEngine];
+    
 	// Create the main window
 	window_ = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
 	
@@ -91,6 +94,7 @@
 	// make main window visible
 	[window_ makeKeyAndVisible];
 	
+    
 	return YES;
 }
 
