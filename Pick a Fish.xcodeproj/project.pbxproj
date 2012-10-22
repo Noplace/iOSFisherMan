@@ -55,6 +55,10 @@
 		650A0A6716131B4A00199451 /* b2WheelJoint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 650A0A3516131B4A00199451 /* b2WheelJoint.cpp */; };
 		650A0A6816131B4A00199451 /* b2Rope.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 650A0A3816131B4A00199451 /* b2Rope.cpp */; };
 		650A0A6A1614713800199451 /* sea-wave-shallow-hd.png in Resources */ = {isa = PBXBuildFile; fileRef = 650A0A691614713800199451 /* sea-wave-shallow-hd.png */; };
+		651455EE16355EE2009BCCAA /* bg-hd.png in Resources */ = {isa = PBXBuildFile; fileRef = 651455EA16355EE2009BCCAA /* bg-hd.png */; };
+		651455EF16355EE2009BCCAA /* bg-ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 651455EB16355EE2009BCCAA /* bg-ipad.png */; };
+		651455F016355EE2009BCCAA /* bg-ipadhd.png in Resources */ = {isa = PBXBuildFile; fileRef = 651455EC16355EE2009BCCAA /* bg-ipadhd.png */; };
+		651455F116355EE2009BCCAA /* bg.png in Resources */ = {isa = PBXBuildFile; fileRef = 651455ED16355EE2009BCCAA /* bg.png */; };
 		65236F0E161BF0EB0046882C /* GameManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = 65236F0D161BF0EB0046882C /* GameManager.mm */; };
 		65236F11161BF36B0046882C /* sea-waves-bg.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 65236F10161BF36B0046882C /* sea-waves-bg.mp3 */; };
 		65236F13161BF8B80046882C /* Audio-SoundEffects.plist in Resources */ = {isa = PBXBuildFile; fileRef = 65236F12161BF8B80046882C /* Audio-SoundEffects.plist */; };
@@ -378,6 +382,10 @@
 		650A0A3816131B4A00199451 /* b2Rope.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = b2Rope.cpp; sourceTree = "<group>"; };
 		650A0A3916131B4A00199451 /* b2Rope.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = b2Rope.h; sourceTree = "<group>"; };
 		650A0A691614713800199451 /* sea-wave-shallow-hd.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "sea-wave-shallow-hd.png"; path = "Resources/Graphics/Sea/sea-wave-shallow-hd.png"; sourceTree = "<group>"; };
+		651455EA16355EE2009BCCAA /* bg-hd.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "bg-hd.png"; path = "Resources/Graphics/bg-hd.png"; sourceTree = "<group>"; };
+		651455EB16355EE2009BCCAA /* bg-ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "bg-ipad.png"; path = "Resources/Graphics/bg-ipad.png"; sourceTree = "<group>"; };
+		651455EC16355EE2009BCCAA /* bg-ipadhd.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "bg-ipadhd.png"; path = "Resources/Graphics/bg-ipadhd.png"; sourceTree = "<group>"; };
+		651455ED16355EE2009BCCAA /* bg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = bg.png; path = Resources/Graphics/bg.png; sourceTree = "<group>"; };
 		65236F0B161BF0EB0046882C /* Constants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Constants.h; path = Code/Constants.h; sourceTree = "<group>"; };
 		65236F0C161BF0EB0046882C /* GameManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GameManager.h; path = Code/GameManager.h; sourceTree = "<group>"; };
 		65236F0D161BF0EB0046882C /* GameManager.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = GameManager.mm; path = Code/GameManager.mm; sourceTree = "<group>"; };
@@ -1496,6 +1504,10 @@
 		657B0E7D161B0AAC00339AE8 /* Graphics */ = {
 			isa = PBXGroup;
 			children = (
+				651455EA16355EE2009BCCAA /* bg-hd.png */,
+				651455EB16355EE2009BCCAA /* bg-ipad.png */,
+				651455EC16355EE2009BCCAA /* bg-ipadhd.png */,
+				651455ED16355EE2009BCCAA /* bg.png */,
 				65B896A71633BC8A0045870A /* UI */,
 				65819E98162FDC3900FCDB77 /* sky-hd.png */,
 				65819ED01630130000FCDB77 /* particle-fire.png */,
@@ -1772,6 +1784,10 @@
 				65B896BB1633E8980045870A /* sliderThumb.png in Resources */,
 				65B896BC1633E8980045870A /* sliderTrack-hd.png in Resources */,
 				65B896BD1633E8980045870A /* sliderTrack.png in Resources */,
+				651455EE16355EE2009BCCAA /* bg-hd.png in Resources */,
+				651455EF16355EE2009BCCAA /* bg-ipad.png in Resources */,
+				651455F016355EE2009BCCAA /* bg-ipadhd.png in Resources */,
+				651455F116355EE2009BCCAA /* bg.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

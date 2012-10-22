@@ -50,8 +50,9 @@ enum {
 		
 		
 		
-		
-		//Set up sprite
+		CCSprite* backgroundSprite = [CCSprite spriteWithFile:@"bg.png"];
+        backgroundSprite.position = ccp(size.width/2, size.height/2);
+        [self addChild:backgroundSprite z:-1];
 		
 
 		//CCLabelTTF *label = [CCLabelTTF labelWithString:@"Pick a Fish!" fontName:@"Verdana" fontSize:32];
