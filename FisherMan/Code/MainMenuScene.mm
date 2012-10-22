@@ -41,7 +41,7 @@ enum {
 {
 	if( (self=[super init])) {
 		
-        
+        [[GameManager sharedGameManager].settings load];
 		// enable events
 		
 		self.isTouchEnabled = YES;
@@ -65,8 +65,7 @@ enum {
         
         
         [self checkGameCenter];
-        
-        //[self authenticateLocalPlayer];
+
         [[GameManager sharedGameManager] authenticateLocalPlayer:@selector(checkGameCenter) object:self];
         
        
@@ -117,7 +116,7 @@ enum {
 	// Reset Button
 	CCMenuItemLabel *startGame = [CCMenuItemFont itemWithString:@"Start Game" block:^(id sender){
 		//[[CCDirector sharedDirector] replaceScene: [GameScene node]];
-        [[GameManager sharedGameManager] runSceneWithID:kGameLevel1];
+        [[GameManager sharedGameManager] runSceneWithID:kLevelSelectScene];
 	}];
     
     
@@ -138,15 +137,20 @@ enum {
 	[itemLeaderboard setTag:kMenuItemLeaderboard];
     
    	CCMenuItem *itemOptions = [CCMenuItemFont itemWithString:@"Options" block:^(id sender) {
+		[[GameManager sharedGameManager] runSceneWithID:kOptionsScene];
+		
+	}];
+    
+    CCMenuItem *itemGameGuide = [CCMenuItemFont itemWithString:@"Game Guide" block:^(id sender) {
 		
 		
 	}];
-	CCMenu *menu = [CCMenu menuWithItems:startGame,itemAchievement,itemLeaderboard,itemOptions, nil];
+	CCMenu *menu = [CCMenu menuWithItems:startGame,itemAchievement,itemLeaderboard,itemOptions,itemGameGuide, nil];
 	
 	[menu alignItemsVertically];
 	
 	CGSize size = [[CCDirector sharedDirector] winSize];
-	[menu setPosition:ccp( size.width/2, size.height/2)];
+	[menu setPosition:ccp( size.width/2, (size.height/2)-30)];
 	
 	
 	[self addChild: menu z:-1 tag:kMenu];

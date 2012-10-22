@@ -8,14 +8,13 @@
 
 
 #import "PhysicsSprite.h"
-
+#import "GameUtil.h"
 // Needed PTM_RATIO
-#import "SeaLayer.h"
 
 #pragma mark - PhysicsSprite
 @implementation PhysicsSprite
 
-@synthesize timeAlive;
+@synthesize timeAlive,type;
 
 -(void) setPhysicsBody:(b2Body *)body
 {
@@ -45,8 +44,9 @@
 	
 	// Make matrix
 	float radians = body_->GetAngle();
-	float c = cosf(radians);
-	float s = sinf(radians);
+    float r2 = -CC_DEGREES_TO_RADIANS(rotation_);
+	float c = cosf(radians+r2);
+	float s = sinf(radians+r2);
 	
 	if( ! CGPointEqualToPoint(anchorPointInPoints_, CGPointZero) ){
 		x += c*-anchorPointInPoints_.x + -s*-anchorPointInPoints_.y;

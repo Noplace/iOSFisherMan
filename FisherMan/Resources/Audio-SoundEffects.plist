@@ -119,8 +119,8 @@
 	<dict/>
 	<key>kGameLevel1</key>
 	<dict>
-		<key>VIKING_CURSING_1</key>
-		<string>22k_viking_cursingV1.wav</string>
+		<key>SPLASH1</key>
+		<string>splash.wav</string>
 	</dict>
 	<key>kGameLevel3</key>
 	<dict>

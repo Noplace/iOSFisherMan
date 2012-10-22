@@ -13,13 +13,14 @@
 
 @implementation AppController
 
-@synthesize window=window_, navController=navController_, director=director_;
+@synthesize navController=navController_;
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    
-    [[GameManager sharedGameManager] setupAudioEngine];
-    
+    gameManager = [GameManager sharedGameManager];
+    [gameManager setupAudioEngine];
+    [gameManager setupGraphics:self];
+    /*
 	// Create the main window
 	window_ = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
 	
@@ -70,30 +71,33 @@
 	// On iPad HD  : "-ipadhd", "-ipad",  "-hd"
 	// On iPad     : "-ipad", "-hd"
 	// On iPhone HD: "-hd"
-	CCFileUtils *sharedFileUtils = [CCFileUtils sharedFileUtils];
+	// Assume that PVR images have premultiplied alpha
+	[CCTexture2D PVRImagesHavePremultipliedAlpha:YES];
+	
+	
+	*/
+    
+    CCFileUtils *sharedFileUtils = [CCFileUtils sharedFileUtils];
 	[sharedFileUtils setEnableFallbackSuffixes:YES];				// Default: NO. No fallback suffixes are going to be used
 	[sharedFileUtils setiPhoneRetinaDisplaySuffix:@"-hd"];		// Default on iPhone RetinaDisplay is "-hd"
 	[sharedFileUtils setiPadSuffix:@"-ipad"];					// Default on iPad is "ipad"
 	[sharedFileUtils setiPadRetinaDisplaySuffix:@"-ipadhd"];	// Default on iPad RetinaDisplay is "-ipadhd"
 	
-	// Assume that PVR images have premultiplied alpha
-	[CCTexture2D PVRImagesHavePremultipliedAlpha:YES];
-	
-	// and add the scene to the stack. The director will run it when it automatically when the view is displayed.
-	[director_ pushScene: [IntroScene scene]]; 
-	
+    // and add the scene to the stack. The director will run it when it automatically when the view is displayed.
+	//[director_ pushScene: [IntroScene scene]];
+	[gameManager runSceneWithID:kIntroScene];
 	
 	// Create a Navigation Controller with the Director
-	navController_ = [[UINavigationController alloc] initWithRootViewController:director_];
+	navController_ = [[UINavigationController alloc] initWithRootViewController:gameManager.director];
 	navController_.navigationBarHidden = YES;
 	
 	// set the Navigation Controller as the root view controller
-//	[window_ addSubview:navController_.view];	// Generates flicker.
-	[window_ setRootViewController:navController_];
+    //	[window_ addSubview:navController_.view];	// Generates flicker.
+	[gameManager.window setRootViewController:navController_];
 	
 	// make main window visible
-	[window_ makeKeyAndVisible];
-	
+	[gameManager.window makeKeyAndVisible];
+    
     
 	return YES;
 }
@@ -108,27 +112,39 @@
 // getting a call, pause the game
 -(void) applicationWillResignActive:(UIApplication *)application
 {
-	if( [navController_ visibleViewController] == director_ )
-		[director_ pause];
+	if( [navController_ visibleViewController] == gameManager.director )
+		[gameManager.director pause];
 }
 
 // call got rejected
 -(void) applicationDidBecomeActive:(UIApplication *)application
 {
-	if( [navController_ visibleViewController] == director_ )
-		[director_ resume];
+	if( [navController_ visibleViewController] == gameManager.director )
+		[gameManager.director resume];
 }
 
 -(void) applicationDidEnterBackground:(UIApplication*)application
 {
-	if( [navController_ visibleViewController] == director_ )
-		[director_ stopAnimation];
+	if( [navController_ visibleViewController] == gameManager.director )
+		[gameManager.director stopAnimation];
+    
+
 }
 
 -(void) applicationWillEnterForeground:(UIApplication*)application
 {
-	if( [navController_ visibleViewController] == director_ )
-		[director_ startAnimation];
+    
+    if (gameManager.currentScene == kMainMenuScene)
+    {
+        //run checkGameCenter method of the layer inside the mainmenu scene
+        [gameManager authenticateLocalPlayer:@selector(checkGameCenter) object:[[gameManager.currentSceneObject children] objectAtIndex:0 ]];
+    }
+    else
+    {
+        [gameManager authenticateLocalPlayer:nil object:nil];
+    }
+	if( [navController_ visibleViewController] == gameManager.director )
+		[gameManager.director startAnimation];
 }
 
 // application will be killed
@@ -140,18 +156,19 @@
 // purge memory
 - (void)applicationDidReceiveMemoryWarning:(UIApplication *)application
 {
-	[[CCDirector sharedDirector] purgeCachedData];
+	[gameManager.director purgeCachedData];
 }
 
 // next delta time will be zero
 -(void) applicationSignificantTimeChange:(UIApplication *)application
 {
-	[[CCDirector sharedDirector] setNextDeltaTimeZero:YES];
+	[gameManager.director setNextDeltaTimeZero:YES];
 }
 
 - (void) dealloc
 {
-	[window_ release];
+
+    [gameManager release];
 	[navController_ release];
 	
 	[super dealloc];

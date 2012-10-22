@@ -10,6 +10,10 @@
 #import "Box2D/Box2D.h"
 #import "GLES-Render.h"
 #import "PhysicsSprite.h"
+#import "time.h"
+
+
+#define BUOYANCYOFFSET 140.0f
 
 
 enum WeatherCondition {
@@ -18,8 +22,23 @@ enum WeatherCondition {
     kWeatherConditionWind,
 };
 
+enum Tags
+{
+    kTagParentNode = 1,
+    kTagSeaParentNode = 2,
+    //kTagSeaFish,
+    kTagSeaObject,
+};
 
-const float timeRatio = 10;
+enum GameObjects
+{
+    kObjectTypeFish1 = 0,
+    kObjectTypeSpecial
+};
+
+
+
+const float timeRatio = 0.4f;
 const float daySeconds = 24.0f*timeRatio;
 const float phaseSeconds = daySeconds/4.0f;
 
@@ -76,11 +95,9 @@ static inline ccColor4F colorLerp4F(const ccColor4F& a, const ccColor4F& b,float
 
 @end
 
-@interface GameLayer : CCLayer <GameLayerProtocol>
-{
-    CGSize size;
-    ccTime timeOfDay_;
-    b2World* world_;
-}
-@property ccTime timeOfDay;
+
+@protocol SeaObjectEventsReceiever <NSObject>
+
+- (void) didCatchObject: (b2Body*) objectBody;
+- (void) stopCatching;
 @end

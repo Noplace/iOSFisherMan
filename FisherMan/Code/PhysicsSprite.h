@@ -15,6 +15,6 @@
 }
 
 @property ccTime timeAlive;
-
+@property int type;
 -(void) setPhysicsBody:(b2Body*)body;
 @end

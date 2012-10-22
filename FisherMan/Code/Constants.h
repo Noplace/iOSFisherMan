@@ -1,13 +1,3 @@
-//  Constants.h
-// Constants used in SpaceViking
-
-#define kVikingSpriteZValue 100
-#define kVikingSpriteTagValue 0
-#define kVikingIdleTimer 3.0f
-#define kVikingFistDamage 10
-#define kVikingMalletDamage 40
-#define kRadarDishTagValue 10
-
 #define kMainMenuTagValue 10
 #define kSceneMenuTagValue 20
 
@@ -17,6 +7,7 @@ typedef enum {
     kOptionsScene=2,
     kCreditsScene=3,
     kLevelCompleteScene=4,
+    kLevelSelectScene=5,
     kIntroScene=100,
     kGameLevel1=101,
     kGameLevel2=102,

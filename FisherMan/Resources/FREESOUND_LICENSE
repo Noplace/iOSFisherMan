@@ -1,0 +1,101 @@
+FREESOUND.ZIP - A sound collection for game development
+*******************************************************
+
+Compiled by: Laszlo Menczel (aka Speaker)
+Date:        September 2009
+
+The sounds in this archive have been downloaded from the WEB site
+'freesound.org'. They are distributed under the Creative Commons
+Sampling Plus 1.0 license. The license can be found here:
+
+http://creativecommons.org/licenses/sampling+/1.0/
+
+Excerpt from the license:
+
+'Your Derivative Work(s) must only make a partial use of the original
+Work, or if You choose to use the original Work as a whole, You must
+either use the Work as an insubstantial portion of Your Derivative Work(s)
+or transform it into something substantially different from the original
+Work.'
+
+My interpretation is that if you only include a couple of sounds in
+unchanged form into a several MB game level or into a large game pack,
+then you are in the clear. I also believe that according to the terms of
+the license modified sounds (derivative works) may be distributed under
+the GNU General Public License. Disclaimer: IANAL, so ask one if this is
+important to you.
+
+Sounds on 'freesound.org' are in many different formats (WAV, AIF,
+MP3, OGG, FLAC, etc.). In addition, their sample size and  number
+of channels are also variable (8, 16 or 24 bits, mono or stereo).
+Quake III Arena and its derivatives use 16-bit mono sounds sampled at
+22 kHz. In order to make the sounds in this archive easier to use, I
+have converted them to this format. I have also removed silent and/or
+uninteresting parts from the original sound samples, and made them
+seamlessly looping when it was possible. Not all sounds have been
+modified by me (maybe 90 percent, I am not sure), so you should
+look up the original and make a comparison if you are worried abut
+license issues.
+
+Sounds in the archive are divided into several categories, each having
+a separate folder. The following categories are used at present:
+
+alarm
+ambience
+animal
+bell_gong
+bubbling
+choir
+click
+creaking
+drip
+electric
+fire
+footstep
+grunt_fight
+hissing_noise
+hum
+human
+machine
+mechanical
+metallic
+monster
+musical
+rain
+ringing
+scream
+shot_explosion
+splash
+swoosh
+thunder
+water
+weird_scifi
+wind
+
+This categorization is probably not perfect, but certainly better than
+having all files in a single folder. The archive at present contains about
+740 sound samples.
+
+I have kept the original sound names (ecept for occasional '_1', '_2',
+etc. postfixes when several sounds were derived from a single downloaded
+sample). The names are quite haphazard but the arrangement of the
+different parts is consistent:
+
+1. each name starts wiht a unique ID number
+2. the next token is the name/ID of the author
+3. the rest is a brief description
+
+So when you want to give credit (as you are obliged to do), you should
+quote the ID number and the following token (author name) and mention
+'freesound.org'.
+
+In case if you are curious why I created this archive: I am one of the
+developers of the freely distributable minimalistic clone of Q3A called
+Q3MIN (http://www.q3min.org). We needed this material for the creation
+of replacements for the sounds used in the original game. I thought that
+other people working on maps or mods may also find this stuff useful, so
+just zipped the folder where I kept these sounds and added this README.
+
+Enjoy!
+
+Speaker
