@@ -9,9 +9,18 @@
 #import "GameSea.h"
 
 
+@interface GameSea()
+{
+    CCSpriteFrame *bombNormalFrame;
+    CCSpriteFrame *bombRedFrame;
+}
+@end
+
 @implementation GameSea
+
 @synthesize model;
 @synthesize seaObjectEventReceiverObject;
+
 - (id) initWithModel:(GameModel*) gameModel;
 {
     [super init];
@@ -38,20 +47,28 @@
     
     model->seaBC = (b2BuoyancyController *)model->world->CreateController(&bcd);
 	
-    model->seaObjectsParentNode = [CCSpriteBatchNode batchNodeWithFile:@"fish1.png" capacity:100];
-    model->seaObjectsTexture = [model->seaObjectsParentNode texture];
+    //model->seaObjectsParentNode = [CCSpriteBatchNode batchNodeWithFile:@"fish1.png" capacity:100];
+    //model->seaObjectsTexture = [model->seaObjectsParentNode texture];
+   
+    model->seaObjectsParentNode = [CCSpriteBatchNode batchNodeWithFile:@"seaobjects.pvr.ccz"];
+    [[CCSpriteFrameCache sharedSpriteFrameCache] addSpriteFramesWithFile:@"seaobjects.plist"];
+    
     
     [model->seaLayer addChild:model->seaObjectsParentNode z:-3 tag:kTagParentNode];
 	
     
     {
+        
         //model->seaParentNode = [CCSpriteBatchNode batchNodeWithFile:@"sea-wave-deep.png" capacity:100];
         //CCTexture2D* seaTexture = [model->seaParentNode texture];
         model->seaShallowTexture = [[CCTextureCache sharedTextureCache] addImage:@"sea-wave-shallow.png"];
         model->seaDeepTexture = [[CCTextureCache sharedTextureCache] addImage:@"sea-wave-deep.png"];
+        model->seaTexture = model->seaDeepTexture;
+        
         for (int i=0;i<4;++i)
         {
-            model->seaSprite[i] = [CCSprite spriteWithTexture:model->seaShallowTexture rect:CGRectMake(0,0,model->winSize.width,128)];
+            
+            model->seaSprite[i] = [CCSprite spriteWithTexture:model->seaTexture rect:CGRectMake(0,0,model->winSize.width,model->seaTexture.contentSize.height)];
             ccTexParams tp = {GL_LINEAR, GL_LINEAR, GL_REPEAT, GL_CLAMP_TO_EDGE};
             model->seaSprite[i].anchorPoint = ccp(0,0);
             
@@ -63,12 +80,14 @@
         
         
     }
-    [self setWaterType:0];
+    [self setWaterType:1];
     
     
     //[self createFishingRod];
     
-    
+    bombNormalFrame = [[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"bomb.png"];
+    bombRedFrame = [[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"bomb-red.png"];
+
     
 }
 
@@ -96,11 +115,21 @@
 {
 	CCLOG(@"Add Sea Object");
 	
-    CGRect fishSize = CGRectMake(0,0,42,64);
+    NSArray *images = [NSArray arrayWithObjects:@"fish1.png", @"fish2.png", @"fish3.png", @"fish4.png",@"bomb.png", nil];
+    int objectIndex = rand() % 4;
     
-	PhysicsSprite *sprite = [PhysicsSprite spriteWithTexture:model->seaObjectsTexture rect:fishSize];
+    if (CCRANDOM_0_1() > 0.9f)
+        objectIndex = 4;
+    
+    PhysicsSprite *sprite = [PhysicsSprite spriteWithSpriteFrameName:[images objectAtIndex:objectIndex]];
 	[model->seaObjectsParentNode addChild:sprite z:-3 tag:kTagSeaObject];
-	
+	CGRect fishSize = CGRectMake(0, 0, sprite.contentSize.width,sprite.contentSize.height);
+    
+    if (objectIndex != 4)
+        sprite.type = 0;
+    else
+        sprite.type = 1;//bomb;
+    
     CGPoint p;
     p.x = CCRANDOM_0_1() * (model->winSize.width-fishSize.size.width);
     p.y = -100.0f;
@@ -136,7 +165,7 @@
 
 - (void) updateSea: (ccTime) dt
 {
-    static const CGFloat pos[4]={30,50,60,80};
+    static const CGFloat pos[4]={-10,20,30,50};
     static const CGFloat amp[4] = {10,12,20,26};
     //static const CGFloat dir[4] = {1,1,1,1};
     static const CGFloat freq[4] = {1.0f,0.7f,0.5f,0.3f};
@@ -147,7 +176,7 @@
     
     static float lastx[4] = {0,0,0,0};
     float dx=0;
-    
+    float cy = (model->seaTexture.contentSize.height*0.5f);
     for (int i=0;i<4;++i)
     {
         float freqX = freq[i];
@@ -156,10 +185,10 @@
         //seaSprite[i].position = ccp(dispX+dir[i]*(sin((2*kmPI*waveTime_[i]*freqX)+phase[i])*rangeX),pos[i]+sin(2*kmPI*waveYTime_*freqY)*ampY);
         float waveIntensity = 1;
         float u = sin((2*kmPI*model->waveTime_[i]*freqX)+phase[i])*rangeX;
-        CGRect texrect = CGRectMake(u,0, 128+waveIntensity, 128);
+        CGRect texrect = CGRectMake(u,0, model->seaTexture.contentSize.width+waveIntensity, model->seaTexture.contentSize.height);
         
-        
-        model->seaSprite[i].position = ccp(model->seaSprite[i].position.x,pos[i]+sin(2*kmPI*model->waveYTime_*freqY)*ampY-64);
+
+        model->seaSprite[i].position = dccp(model->seaSprite[i].position.x,pos[i]+sin(2*kmPI*model->waveYTime_*freqY)*ampY);
         [model->seaSprite[i] setTextureCoords:texrect];
         
         
@@ -174,7 +203,9 @@
             model->waveYTime_ -= (1/freqY);
     }
     
-    model->seaBC->offset = ptm(model->seaSprite[2].position.y+64);
+    model->seaBC->offset = ptm(model->seaSprite[2].position.y+model->seaTexture.contentSize.height*0.5f);
+    
+   
     /*dx = seaSprite[2].position.x - lastx[2];
      b2Vec2 force = b2Vec2(dx*100/rangeX,0);
      
@@ -218,6 +249,17 @@
         PhysicsSprite* sp = [model->seaObjectsParentNode.children objectAtIndex:i];
         if (sp.tag == kTagSeaObject)// && !(model->currentSeaObjectBeingCaught != NULL && model->currentSeaObjectBeingCaught == sp->body_))
         {
+            
+            if (sp.type == 1) //bomb
+            {
+                float f = sin(sp.timeAlive*sp.timeAlive*kmPI);
+                if (f > 0.9f)
+                    [sp setDisplayFrame:bombRedFrame];
+                else if (f < -0.9f)
+                   [sp setDisplayFrame:bombNormalFrame];
+                //sp.scale = 1.0f +                 //sp.color = colorLerp3B(ccc3(255, 255, 255), ccc3(255, 0, 0), 1+sin(sp.timeAlive*kmPI));
+            }
+            
             sp.timeAlive += dt;
             if (sp.type == 0)
             {
@@ -236,13 +278,19 @@
                     ++([GameManager sharedGameManager]->counters.fishMissed);
                 }
             }
-            else if (sp.type == 1) //specials
+            else if (sp.type == 1) //bomb
             {
-                if (sp.timeAlive > model->specialsAliveTime)
+                if (sp.timeAlive >= model->bombAliveTime)
                 {
+                    if (model->currentSeaObjectBeingCaught != NULL && model->currentSeaObjectBeingCaught == sp->body_)
+                    {
+                        [seaObjectEventReceiverObject stopCatching];
+                    }
+                    [seaObjectEventReceiverObject bombExplode:sp->body_];
                     model->world->DestroyBody(sp->body_);
                     [model->seaObjectsParentNode removeChild:sp cleanup:YES];
-                    //specials count++
+                    
+                   
                 }
             }
         }

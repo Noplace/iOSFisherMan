@@ -96,16 +96,16 @@
 	groundBody->CreateFixture(&groundBox,0);
 	
 	// top
-	groundBox.Set(b2Vec2(0,winSize.height/PTM_RATIO), b2Vec2(winSize.width/PTM_RATIO,winSize.height/PTM_RATIO));
-	groundBody->CreateFixture(&groundBox,0);
+	//groundBox.Set(b2Vec2(0,winSize.height/PTM_RATIO), b2Vec2(winSize.width/PTM_RATIO,winSize.height/PTM_RATIO));
+	//groundBody->CreateFixture(&groundBox,0);
 	
 	// left
-	groundBox.Set(b2Vec2(0,winSize.height/PTM_RATIO), b2Vec2(0,0));
-	groundBody->CreateFixture(&groundBox,0);
+	//groundBox.Set(b2Vec2(0,winSize.height/PTM_RATIO), b2Vec2(0,0));
+	//groundBody->CreateFixture(&groundBox,0);
 	
 	// right
-	groundBox.Set(b2Vec2(winSize.width/PTM_RATIO,winSize.height/PTM_RATIO), b2Vec2(winSize.width/PTM_RATIO,0));
-	groundBody->CreateFixture(&groundBox,0);
+	//groundBox.Set(b2Vec2(winSize.width/PTM_RATIO,winSize.height/PTM_RATIO), b2Vec2(winSize.width/PTM_RATIO,0));
+	//groundBody->CreateFixture(&groundBox,0);
 }
 
 
@@ -153,6 +153,15 @@
     [self setWeatherCondition:kWeatherConditionClouds Enable:enabled[0] Intensity:intensity[0]];
     [self setWeatherCondition:kWeatherConditionRain Enable:enabled[1] Intensity:intensity[1]];
     [self setWeatherCondition:kWeatherConditionWind Enable:enabled[2] Intensity:intensity[2]];
+}
+
+- (void) destroyCaughtAndResetTimer
+{
+    catchingTimer.opacity = 0;
+    world->DestroyBody(currentSeaObjectBeingCaught);
+    [seaObjectsParentNode removeChild:(CCSprite*)currentSeaObjectBeingCaught->GetUserData() cleanup:YES];
+    startCatchSeaObject = NO;
+    currentSeaObjectBeingCaught = NULL;
 }
 
 - (void) draw

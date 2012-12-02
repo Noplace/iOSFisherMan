@@ -13,6 +13,17 @@
 #import "time.h"
 
 
+#define IS_IPAD (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+
+
+#define SCREENWIDTH (IS_IPAD ? 768.0 : 320.0)
+#define SCREENHEIGHT (IS_IPAD ? 1024.0 : 480.0)
+
+
+#define DEVSCALE(n) (IS_IPAD ? n*2 : n)
+
+#define dccp(x,y) ccp(DEVSCALE(x),DEVSCALE(y))
+
 #define BUOYANCYOFFSET 140.0f
 
 
@@ -98,6 +109,7 @@ static inline ccColor4F colorLerp4F(const ccColor4F& a, const ccColor4F& b,float
 
 @protocol SeaObjectEventsReceiever <NSObject>
 
+- (void) bombExplode: (b2Body*) objectBody;
 - (void) didCatchObject: (b2Body*) objectBody;
 - (void) stopCatching;
 @end

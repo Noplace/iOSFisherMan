@@ -36,7 +36,8 @@
 	
 	float x = pos.x * PTM_RATIO;
 	float y = pos.y * PTM_RATIO;
-	
+	position_.x = x;
+    position_.y = y;
 	if ( ignoreAnchorPointForPosition_ ) {
 		x += anchorPointInPoints_.x;
 		y += anchorPointInPoints_.y;
@@ -54,8 +55,9 @@
 	}
 	
 	// Rot, Translate Matrix
-	transform_ = CGAffineTransformMake( c,  s,
-									   -s,	c,
+   
+	transform_ = CGAffineTransformMake( c*scaleX_,  s,
+									   -s,	c*scaleY_,
 									   x,	y );
 	
 	return transform_;

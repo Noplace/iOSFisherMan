@@ -69,7 +69,7 @@ inline float Noise(uint32_t* seed)
     for (CCSprite* sp in skyStarsBatchNode.children)
     {
         float xr = (1+RandomFloat(&randomSeed))*0.5f;
-        float yr = (1+RandomFloat(&randomSeed))*0.5f;
+        float yr = 0.72f+((1+RandomFloat(&randomSeed))*0.09f);
         sp.position = ccp(xr*model->winSize.width,yr*model->winSize.height);
     }
     
@@ -78,7 +78,7 @@ inline float Noise(uint32_t* seed)
 - (void) initSky
 {
     model->dayOfYear = 100;//[SolarUtil dayOfYear:[NSDate date]];
-    randomSeed = 1;
+    randomSeed = random();
     model->skyPhase=3;
     model->skyTime = 0.0f;
     
@@ -88,7 +88,7 @@ inline float Noise(uint32_t* seed)
     
     skyStarsBatchNode = [CCSpriteBatchNode batchNodeWithFile:@"particle-stars.png"];
     
-    for (int i=0;i<12;++i)
+    for (int i=0;i<6;++i)
     {
         CCSprite* starSprite = [CCSprite spriteWithTexture:skyStarsBatchNode.texture];
         //float xr = (1+RandomFloat(&randomSeed))*0.5f;
@@ -101,6 +101,10 @@ inline float Noise(uint32_t* seed)
     [self randomizeStars];
 
     skySprite = [CCSprite spriteWithFile:@"sky.png" rect:CGRectMake(0,0,model->winSize.width,model->winSize.height)];
+    //ccTexParams tp = {GL_LINEAR, GL_LINEAR, GL_REPEAT, GL_CLAMP_TO_EDGE};
+    //[skySprite.texture setTexParameters:&tp];
+    skySprite.position = ccp(0,0);
+   
     //model->skyDaySprite = [CCSprite spriteWithFile:@"sky-day.png" rect:CGRectMake(0,0,model->winSize.width,model->winSize.height)];
     //model->skyNightSprite = [CCSprite spriteWithFile:@"sky-night.png" rect:CGRectMake(0,0,model->winSize.width,model->winSize.height)];
     model->sunSprite = [CCSprite spriteWithFile:@"sun.png" ];
@@ -125,18 +129,20 @@ inline float Noise(uint32_t* seed)
     //[model->bgLayer addChild:model->skyDaySprite z:-1];
     //[model->bgLayer addChild:model->skyNightSprite z:-1];
     [model->bgLayer addChild:skySprite z:-1];
-    [model->bgLayer addChild:model->sunSprite z:1];
-    [model->bgLayer addChild:model->moonSprite z:1];
-    [model->bgLayer addChild:model->cloudsParent z:2];
+    [model->bgLayer addChild:model->sunSprite z:3];
+    [model->bgLayer addChild:model->moonSprite z:3];
+    [model->bgLayer addChild:model->cloudsParent z:5];
 }
 
 
 
 - (void) addCloud:(ccTime) dt location:(CGPoint) location
 {
+    float cx = model->cloudsTexture.contentSize.width*0.5f;
+    float cy = model->cloudsTexture.contentSize.height*0.5f;
     int idx = (CCRANDOM_0_1() > .5 ? 0:1);
 	int idy = (CCRANDOM_0_1() > .5 ? 0:1);
-    PhysicsSprite* cloudSprite = [PhysicsSprite spriteWithTexture:model->cloudsTexture rect:CGRectMake(idx*128,idy*64,128,64)];
+    PhysicsSprite* cloudSprite = [PhysicsSprite spriteWithTexture:model->cloudsTexture rect:CGRectMake(idx*cx,idy*cy,cx,cy)];
     [model->cloudsParent addChild: cloudSprite];
     
     

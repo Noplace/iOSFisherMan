@@ -28,6 +28,7 @@
 @public    CCTexture2D* cloudsTexture;
 @public    CCTexture2D* seaShallowTexture;
 @public    CCTexture2D *seaDeepTexture;
+@public    CCTexture2D *seaTexture;
 @public   CCSpriteBatchNode* cloudsParent;
 @public   CCSpriteBatchNode *seaObjectsParentNode;
 //@public   CCSpriteBatchNode* seaParentNode;
@@ -43,7 +44,8 @@
 @public    ccTime timeOfDay_;
 @public    ccTime seaObjectSpawnCounter;
 @public    ccTime fishAliveTime;
-@public    ccTime specialsAliveTime;
+@public    ccTime bombAliveTime;
+@public    ccTime treasureAliveTime;
 @public    ccTime seaObjectSpawnTime;
 @public    ccTime cloudTimer_;
 @public    ccTime catchSeaObjectCounter,catchSeaObjectTime;
@@ -72,6 +74,7 @@
 - (void) resetCloudsTimer;
 - (void) setWeatherCondition: (WeatherCondition) cond Enable:(BOOL) enable Intensity: (float) intensity;
 - (void) randomizeWeather;
+- (void) destroyCaughtAndResetTimer;
 @end
 
 #endif

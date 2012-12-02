@@ -117,7 +117,7 @@ enum {
 	// Reset Button
 	CCMenuItemLabel *startGame = [CCMenuItemFont itemWithString:@"Start Game" block:^(id sender){
 		//[[CCDirector sharedDirector] replaceScene: [GameScene node]];
-        [[GameManager sharedGameManager] runSceneWithID:kLevelSelectScene];
+        [[GameManager sharedGameManager] runSceneWithID:kGameLevel1];
 	}];
     
     

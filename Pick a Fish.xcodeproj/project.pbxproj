@@ -233,8 +233,6 @@
 		65819E8D1626CF6200FCDB77 /* FREESOUND_LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = 65819E8C1626CF6200FCDB77 /* FREESOUND_LICENSE */; };
 		65819E8F162D0A3C00FCDB77 /* GameSettings.plist in Resources */ = {isa = PBXBuildFile; fileRef = 65819E8E162D0A3C00FCDB77 /* GameSettings.plist */; };
 		65819E92162D0DAF00FCDB77 /* GameSettings.mm in Sources */ = {isa = PBXBuildFile; fileRef = 65819E91162D0DAE00FCDB77 /* GameSettings.mm */; };
-		65819E96162E610800FCDB77 /* fish1-hd.png in Resources */ = {isa = PBXBuildFile; fileRef = 65819E94162E610800FCDB77 /* fish1-hd.png */; };
-		65819E97162E610800FCDB77 /* fish1.png in Resources */ = {isa = PBXBuildFile; fileRef = 65819E95162E610800FCDB77 /* fish1.png */; };
 		65819E9A162FDC3C00FCDB77 /* sky-hd.png in Resources */ = {isa = PBXBuildFile; fileRef = 65819E98162FDC3900FCDB77 /* sky-hd.png */; };
 		65819E9B162FDC3C00FCDB77 /* sky.png in Resources */ = {isa = PBXBuildFile; fileRef = 65819E99162FDC3B00FCDB77 /* sky.png */; };
 		65819ED61630131000FCDB77 /* particle-fire.png in Resources */ = {isa = PBXBuildFile; fileRef = 65819ED01630130000FCDB77 /* particle-fire.png */; };
@@ -246,6 +244,10 @@
 		65819EDE1633AB9B00FCDB77 /* LevelSelectScene.mm in Sources */ = {isa = PBXBuildFile; fileRef = 65819EDD1633AB9A00FCDB77 /* LevelSelectScene.mm */; };
 		65819F111633B5BE00FCDB77 /* LICENSE_CCControlExtention.txt in Resources */ = {isa = PBXBuildFile; fileRef = 65819F101633B5BD00FCDB77 /* LICENSE_CCControlExtention.txt */; };
 		658303BD1622B74A000C38B7 /* arc.png in Resources */ = {isa = PBXBuildFile; fileRef = 658303BC1622B74A000C38B7 /* arc.png */; };
+		65875DC31640EB6500DE1C27 /* seaobjects-hd.pvr.ccz in Resources */ = {isa = PBXBuildFile; fileRef = 65875DBF1640EB6400DE1C27 /* seaobjects-hd.pvr.ccz */; };
+		65875DC41640EB6500DE1C27 /* seaobjects.pvr.ccz in Resources */ = {isa = PBXBuildFile; fileRef = 65875DC01640EB6400DE1C27 /* seaobjects.pvr.ccz */; };
+		65875DC51640EB6500DE1C27 /* seaobjects-hd.plist in Resources */ = {isa = PBXBuildFile; fileRef = 65875DC11640EB6400DE1C27 /* seaobjects-hd.plist */; };
+		65875DC61640EB6500DE1C27 /* seaobjects.plist in Resources */ = {isa = PBXBuildFile; fileRef = 65875DC21640EB6400DE1C27 /* seaobjects.plist */; };
 		658BF3D3160EE37B00A526E1 /* white1x1.png in Resources */ = {isa = PBXBuildFile; fileRef = 658BF3D2160EE37B00A526E1 /* white1x1.png */; };
 		658BF3F516100E7300A526E1 /* clouds-hd.png in Resources */ = {isa = PBXBuildFile; fileRef = 658BF3F316100E7300A526E1 /* clouds-hd.png */; };
 		658BF3F616100E7300A526E1 /* clouds.png in Resources */ = {isa = PBXBuildFile; fileRef = 658BF3F416100E7300A526E1 /* clouds.png */; };
@@ -722,8 +724,6 @@
 		65819E8E162D0A3C00FCDB77 /* GameSettings.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = GameSettings.plist; path = Resources/GameSettings.plist; sourceTree = "<group>"; };
 		65819E90162D0DAE00FCDB77 /* GameSettings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GameSettings.h; path = Code/GameSettings.h; sourceTree = "<group>"; };
 		65819E91162D0DAE00FCDB77 /* GameSettings.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = GameSettings.mm; path = Code/GameSettings.mm; sourceTree = "<group>"; };
-		65819E94162E610800FCDB77 /* fish1-hd.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "fish1-hd.png"; sourceTree = "<group>"; };
-		65819E95162E610800FCDB77 /* fish1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = fish1.png; sourceTree = "<group>"; };
 		65819E98162FDC3900FCDB77 /* sky-hd.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "sky-hd.png"; path = "Resources/Graphics/sky-hd.png"; sourceTree = "<group>"; };
 		65819E99162FDC3B00FCDB77 /* sky.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = sky.png; path = Resources/Graphics/sky.png; sourceTree = "<group>"; };
 		65819ED01630130000FCDB77 /* particle-fire.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "particle-fire.png"; path = "Resources/Graphics/particle-fire.png"; sourceTree = "<group>"; };
@@ -737,6 +737,10 @@
 		65819F101633B5BD00FCDB77 /* LICENSE_CCControlExtention.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = LICENSE_CCControlExtention.txt; path = libs/LICENSE_CCControlExtention.txt; sourceTree = "<group>"; };
 		658303AB162164BA000C38B7 /* SeaHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = SeaHelper.h; path = Code/SeaHelper.h; sourceTree = "<group>"; };
 		658303BC1622B74A000C38B7 /* arc.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = arc.png; path = Resources/Graphics/arc.png; sourceTree = "<group>"; };
+		65875DBF1640EB6400DE1C27 /* seaobjects-hd.pvr.ccz */ = {isa = PBXFileReference; lastKnownFileType = file; name = "seaobjects-hd.pvr.ccz"; path = "Resources/Graphics/seaobjects-hd.pvr.ccz"; sourceTree = "<group>"; };
+		65875DC01640EB6400DE1C27 /* seaobjects.pvr.ccz */ = {isa = PBXFileReference; lastKnownFileType = file; name = seaobjects.pvr.ccz; path = Resources/Graphics/seaobjects.pvr.ccz; sourceTree = "<group>"; };
+		65875DC11640EB6400DE1C27 /* seaobjects-hd.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "seaobjects-hd.plist"; path = "Resources/Graphics/seaobjects-hd.plist"; sourceTree = "<group>"; };
+		65875DC21640EB6400DE1C27 /* seaobjects.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = seaobjects.plist; path = Resources/Graphics/seaobjects.plist; sourceTree = "<group>"; };
 		658BF3D2160EE37B00A526E1 /* white1x1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = white1x1.png; path = Resources/Graphics/white1x1.png; sourceTree = "<group>"; };
 		658BF3F316100E7300A526E1 /* clouds-hd.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "clouds-hd.png"; path = "Resources/Graphics/clouds-hd.png"; sourceTree = "<group>"; };
 		658BF3F416100E7300A526E1 /* clouds.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = clouds.png; path = Resources/Graphics/clouds.png; sourceTree = "<group>"; };
@@ -1504,6 +1508,10 @@
 		657B0E7D161B0AAC00339AE8 /* Graphics */ = {
 			isa = PBXGroup;
 			children = (
+				65875DBF1640EB6400DE1C27 /* seaobjects-hd.pvr.ccz */,
+				65875DC01640EB6400DE1C27 /* seaobjects.pvr.ccz */,
+				65875DC11640EB6400DE1C27 /* seaobjects-hd.plist */,
+				65875DC21640EB6400DE1C27 /* seaobjects.plist */,
 				651455EA16355EE2009BCCAA /* bg-hd.png */,
 				651455EB16355EE2009BCCAA /* bg-ipad.png */,
 				651455EC16355EE2009BCCAA /* bg-ipadhd.png */,
@@ -1517,7 +1525,6 @@
 				65819ED41630130A00FCDB77 /* ui-slider-bg.png */,
 				65819ED51630130B00FCDB77 /* ui-slider-thumb.png */,
 				65819E99162FDC3B00FCDB77 /* sky.png */,
-				65819E93162E610800FCDB77 /* Fish */,
 				658F54101622BD0E00EFDF47 /* arc-hd.png */,
 				658303BC1622B74A000C38B7 /* arc.png */,
 				657833BC160C3CFC00059086 /* blocks.png */,
@@ -1564,16 +1571,6 @@
 				65236F10161BF36B0046882C /* sea-waves-bg.mp3 */,
 			);
 			name = Audio;
-			sourceTree = "<group>";
-		};
-		65819E93162E610800FCDB77 /* Fish */ = {
-			isa = PBXGroup;
-			children = (
-				65819E94162E610800FCDB77 /* fish1-hd.png */,
-				65819E95162E610800FCDB77 /* fish1.png */,
-			);
-			name = Fish;
-			path = Resources/Graphics/Fish;
 			sourceTree = "<group>";
 		};
 		65B896761633BB780045870A /* CCControlExtension */ = {
@@ -1761,8 +1758,6 @@
 				65819E8B1626CF5700FCDB77 /* sea-wave-deep-hd.png in Resources */,
 				65819E8D1626CF6200FCDB77 /* FREESOUND_LICENSE in Resources */,
 				65819E8F162D0A3C00FCDB77 /* GameSettings.plist in Resources */,
-				65819E96162E610800FCDB77 /* fish1-hd.png in Resources */,
-				65819E97162E610800FCDB77 /* fish1.png in Resources */,
 				65819E9A162FDC3C00FCDB77 /* sky-hd.png in Resources */,
 				65819E9B162FDC3C00FCDB77 /* sky.png in Resources */,
 				65819ED61630131000FCDB77 /* particle-fire.png in Resources */,
@@ -1788,6 +1783,10 @@
 				651455EF16355EE2009BCCAA /* bg-ipad.png in Resources */,
 				651455F016355EE2009BCCAA /* bg-ipadhd.png in Resources */,
 				651455F116355EE2009BCCAA /* bg.png in Resources */,
+				65875DC31640EB6500DE1C27 /* seaobjects-hd.pvr.ccz in Resources */,
+				65875DC41640EB6500DE1C27 /* seaobjects.pvr.ccz in Resources */,
+				65875DC51640EB6500DE1C27 /* seaobjects-hd.plist in Resources */,
+				65875DC61640EB6500DE1C27 /* seaobjects.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

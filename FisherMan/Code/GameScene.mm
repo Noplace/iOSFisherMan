@@ -63,6 +63,7 @@ const ccTime fixed_dt_ = 1.0f/60.0f;
         self.isTouchEnabled = YES;
 		self.isAccelerometerEnabled = YES;
         srandom(time(NULL));
+        srand(time(NULL));
         timer_accumulator_ = 0;
         m_debugDraw = new GLESDebugDraw( PTM_RATIO );
         
@@ -148,7 +149,7 @@ const ccTime fixed_dt_ = 1.0f/60.0f;
     assert(model->difficulty >=0 &&  model->difficulty <= 2);
     model->timeLeft_ = timeLeftLevel[model->level] - ( model->difficulty*10*(model->level+1));
     model->fishAliveTime = 5.5f - (model->difficulty*1.25);
-    model->specialsAliveTime = 3.0f - (model->difficulty*0.75);
+    model->bombAliveTime = 6.0f - (model->difficulty*0.75);
     model->seaObjectSpawnTime = 2.0f;
     
     {
@@ -425,6 +426,7 @@ const ccTime fixed_dt_ = 1.0f/60.0f;
 	{
 		//[[CCDirector sharedDirector] replaceScene:[CCTransitionRotoZoom transitionWithDuration:1.0 scene:[MainMenuLayer scene]]];
     	//[[CCDirector sharedDirector] replaceScene:[CCTransitionFade transitionWithDuration:1.0 scene:[MainMenuScene scene] withColor:ccWHITE]];
+        [self stopGame];
         [[GameManager sharedGameManager] runSceneWithID:kMainMenuScene];
 	}
 	else if (buttonIndex == 1)
@@ -467,20 +469,38 @@ const ccTime fixed_dt_ = 1.0f/60.0f;
     model->catchingTimer.opacity = 0;
 }
 
-- (void) didCatchObject:(b2Body *)objectBody
+- (void) bombExplode:(b2Body *)objectBody
 {
     PhysicsSprite* sp = (PhysicsSprite*)objectBody->GetUserData();
-    //score calc
-    if (sp.type == 0)
+    //explode
     {
-        float f1 = (model->fishAliveTime-sp.timeAlive);
-        uint64_t currentScore = 5*((model->difficulty+1)*1.5f)+f1*6.5;
-        CCLabelBMFont* tempScoreLabel = [CCLabelBMFont labelWithString:[NSString stringWithFormat:@"%llu",currentScore] fntFile:@"font-score-time.fnt"];
-        tempScoreLabel.position = ccp(model->catchingTimer.position.x,model->catchingTimer.position.y);
-        [self addChild:tempScoreLabel z:100];
+        CCParticleSun* explosion = [[CCParticleSun alloc]initWithTotalParticles:450];
+        explosion.autoRemoveOnFinish = YES;
+        explosion.startSize = 30.0f;
+        explosion.speed = 150.0f;
+        explosion.anchorPoint = ccp(0.5f,0.5f);
+        explosion.position = sp.position;
+        explosion.duration = 0.4f;
+        [self addChild:explosion z:10];
+        b2Body* body = model->world->GetBodyList();
+        b2Vec2 force = b2Vec2(0,3000);
+        b2Vec2 bombPos = sp->body_->GetPosition();
+        while (body != NULL)
+        {
+            b2Vec2 p = body->GetPosition();
+            float intensity = p.x - bombPos.x;
+            force.x = (1 / intensity)*10000.0f;
+            body->ApplyForceToCenter(force);
+            body = body->GetNext();
+        }
+        CCLabelBMFont* tempScoreLabel = [CCLabelBMFont labelWithString:@"-10" fntFile:@"font-score-time.fnt"];
+        tempScoreLabel.anchorPoint = ccp(0,1.0f);
+        tempScoreLabel.position = ccp(0,model->winSize.height);
+        tempScoreLabel.color = ccc3(255,0,0);
+        [model->seaLayer addChild:tempScoreLabel z:100];
         
         {
-            id move = [CCMoveTo actionWithDuration:2 position:ccp(tempScoreLabel.position.x,winSize.height+tempScoreLabel.contentSize.height)];
+            id move = [CCMoveTo actionWithDuration:2 position:ccp(model->winSize.width,model->winSize.height)];
             //id delay1 = [CCDelayTime actionWithDuration:2.0f];
             id fade = [CCFadeOut actionWithDuration:2.0f];
             id callcleanup = [CCCallFuncO actionWithTarget:self selector:@selector(cleanupTempLabels:) object:tempScoreLabel];
@@ -488,16 +508,46 @@ const ccTime fixed_dt_ = 1.0f/60.0f;
             id spawn = [CCSpawn actions:move,seqAction1, nil];
             [tempScoreLabel runAction:spawn];
         }
-        model->score += currentScore;
-    
-        ++(gameManager->counters.fishCaught);
-        model->catchingTimer.opacity = 0;
-        model->world->DestroyBody(model->currentSeaObjectBeingCaught);
-        [model->seaObjectsParentNode removeChild:sp cleanup:YES];
-        model->startCatchSeaObject = NO;
-        model->currentSeaObjectBeingCaught = NULL;
-        //play sound
-    [   gameManager playSoundEffect:@"SPLASH1"];
+        model->timeLeft_ -= 10;
+    }
+
+}
+
+- (void) didCatchObject:(b2Body *)objectBody
+{
+    PhysicsSprite* sp = (PhysicsSprite*)objectBody->GetUserData();
+    //score calc
+    switch (sp.type)
+    {
+        case 0: //fish
+        {
+            float f1 = (model->fishAliveTime-sp.timeAlive);
+            uint64_t currentScore = 5*((model->difficulty+1)*1.5f)+f1*6.5;
+            CCLabelBMFont* tempScoreLabel = [CCLabelBMFont labelWithString:[NSString stringWithFormat:@"%llu",currentScore] fntFile:@"font-score-time.fnt"];
+            tempScoreLabel.position = ccp(model->catchingTimer.position.x,model->catchingTimer.position.y);
+            [self addChild:tempScoreLabel z:100];
+            
+            {
+                id move = [CCMoveTo actionWithDuration:2 position:ccp(tempScoreLabel.position.x,winSize.height+tempScoreLabel.contentSize.height)];
+                //id delay1 = [CCDelayTime actionWithDuration:2.0f];
+                id fade = [CCFadeOut actionWithDuration:2.0f];
+                id callcleanup = [CCCallFuncO actionWithTarget:self selector:@selector(cleanupTempLabels:) object:tempScoreLabel];
+                id seqAction1 = [CCSequence actions:fade,callcleanup,nil];
+                id spawn = [CCSpawn actions:move,seqAction1, nil];
+                [tempScoreLabel runAction:spawn];
+            }
+            model->score += currentScore;
+        
+            ++(gameManager->counters.fishCaught);
+            [model destroyCaughtAndResetTimer];
+            [gameManager playSoundEffect:@"SPLASH1"];
+        }
+            break;
+        case 1: //bomb
+        {
+            [model destroyCaughtAndResetTimer];
+        }
+            break;
     }
 }
 
@@ -563,11 +613,15 @@ const ccTime fixed_dt_ = 1.0f/60.0f;
     }
     [self stopCatching];
     
+    
 	//Add a new body/atlas sprite at the touched location
 	for( UITouch *touch in touches ) {
         CGPoint location = [touch locationInView: [touch view]];
 		location = [[CCDirector sharedDirector] convertToGL: location];
-
+    
+        
+        
+        
 	}
 }
 
